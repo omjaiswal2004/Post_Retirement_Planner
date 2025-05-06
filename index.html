@@ -1,65 +1,147 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Retirement Finance Planner | Welcome</title>
-  <link rel="stylesheet" href="1style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post Retirement Finance Plan Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-  <div class="container">
-    <div class="hero">
-      <h1>Post-Retirement Finance Planner</h1>
-      <p>Take control of your financial future with our comprehensive retirement planning tool.</p>
-    </div>
+  <nav>
+    <div class="logo">💼 Finance Tracker</div>
+    <div class="nav-controls">
+      <button class="control-btn" id="languageToggle">
+        <i class="fas fa-language"></i>
+        <span>EN</span>
+      </button>
+      <button class="control-btn" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+      <div class="nav-dropdown">
+        <button class="nav-dropbtn">
+          <i class="fas fa-bars"></i>
+          <span data-en="Menu" data-hi="मेनू">Menu</span>
+        </button>
+        <div class="nav-dropdown-content">
+          <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+          <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+          <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+          <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+          <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+          <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+          <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+          <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+          <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+          <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+          <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+          <a href="12_bill_payments.html" data-en="Future Insights" data-hi="भविष्य के विचार">Bill And Maintanance</a>
 
-    <div class="auth-container">
-      <!-- Login Box -->
-      <div class="auth-box" id="login-box">
-        <h2>Login</h2>
-        <form id="login-form">
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="login-email" required>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="login-password" required>
-          </div>
-          <button type="submit">Login</button>
-        </form>
-        <div class="switch-form">
-          Don’t have an account? <a href="#" id="show-signup">Sign up</a>
-        </div>
-      </div>
-
-      <!-- Signup Box -->
-      <div class="auth-box hidden" id="signup-box">
-        <h2>Sign Up</h2>
-        <form id="signup-form">
-          <div class="form-group">
-            <label>Full Name</label>
-            <input type="text" id="signup-name" required>
-          </div>
-          <div class="form-group">
-            <label>Email</label>
-            <input type="email" id="signup-email" required>
-          </div>
-          <div class="form-group">
-            <label>Password</label>
-            <input type="password" id="signup-password" required>
-          </div>
-          <div class="form-group">
-            <label>Confirm Password</label>
-            <input type="password" id="signup-confirm" required>
-          </div>
-          <button type="submit">Create Account</button>
-        </form>
-        <div class="switch-form">
-          Already have an account? <a href="#" id="show-login">Login</a>
+          <a href="index.html" data-en="Logout" data-hi="लॉग आउट">Logout</a>
         </div>
       </div>
     </div>
+  </nav>
+  
+  <section class="dashboard">
+    <h2 style="margin-bottom: 1.5rem;" data-en="Welcome to Your Post-Retirement Dashboard" data-hi="आपके सेवानिवृत्ति डैशबोर्ड में आपका स्वागत है">Welcome to Your Post-Retirement Dashboard</h2>
+    <div class="card-container">
+      <a href="2_income.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-wallet"></i>
+          <h3 data-en="Log Income" data-hi="आय दर्ज करें">Log Income</h3>
+          <p data-en="Add sources of retirement income and pensions." data-hi="सेवानिवृत्ति आय और पेंशन के स्रोत जोड़ें।">Add sources of retirement income and pensions.</p>
+        </div>
+      </a>
+      <a href="3_expence.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-receipt"></i>
+          <h3 data-en="Log Expenses" data-hi="व्यय दर्ज करें">Log Expenses</h3>
+          <p data-en="Track monthly expenses and adjust budget limits." data-hi="मासिक व्यय ट्रैक करें और बजट सीमा समायोजित करें।">Track monthly expenses and adjust budget limits.</p>
+        </div>
+      </a>
+      <a href="5_goals.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-bullseye"></i>
+          <h3 data-en="Set Goals" data-hi="लक्ष्य निर्धारित करें">Set Goals</h3>
+          <p data-en="Plan and set achievable post-retirement goals." data-hi="सेवानिवृत्ति के बाद के प्राप्त करने योग्य लक्ष्यों की योजना बनाएं और निर्धारित करें।">Plan and set achievable post-retirement goals.</p>
+        </div>
+      </a>
+      <a href="7_investments.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-chart-line"></i>
+          <h3 data-en="Track Investments" data-hi="निवेश ट्रैक करें">Track Investments</h3>
+          <p data-en="Manage your investment portfolio and maturity status." data-hi="अपने निवेश पोर्टफोलियो और परिपक्वता स्थिति का प्रबंधन करें।">Manage your investment portfolio and maturity status.</p>
+        </div>
+      </a>
+      <a href="9_reports.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <h3 data-en="Financial Reports" data-hi="वित्तीय रिपोर्ट">Financial Reports</h3>
+          <p data-en="Generate summaries and receive financial alerts." data-hi="सारांश उत्पन्न करें और वित्तीय चेतावनियां प्राप्त करें।">Generate summaries and receive financial alerts.</p>
+        </div>
+      </a>
+      <a href="6_insurance.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-shield-alt"></i>
+          <h3 data-en="Manage Insurance" data-hi="बीमा प्रबंधित करें">Manage Insurance</h3>
+          <p data-en="Track policies, premiums, and coverage for peace of mind." data-hi="मन की शांति के लिए पॉलिसियों, प्रीमियम और कवरेज को ट्रैक करें।">Track policies, premiums, and coverage for peace of mind.</p>
+        </div>
+      </a>
+      <a href="4_income_tax.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-calculator"></i>
+          <h3 data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</h3>
+          <p data-en="Calculate estimated income tax" data-hi="अनुमानित आयकर की गणना करें">Calculate estimated income tax</p>
+        </div>
+      </a>
+      <a href="8_finantial_advice.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-comments-dollar"></i>
+          <h3 data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</h3>
+          <p data-en="Gives guidance based on different professions." data-hi="विभिन्न पेशों के आधार पर मार्गदर्शन देता है।">Gives guidance based on different professions.</p>
+        </div>
+      </a>
+      <a href="10_role_based.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-users"></i>
+          <h3 data-en="Role Based Guidance" data-hi="भूमिका आधारित मार्गदर्शन">Role Based Guidance</h3>
+          <p data-en="Gives guidance based on different roles." data-hi="विभिन्न भूमिकाओं के आधार पर मार्गदर्शन देता है।">Gives guidance based on different roles.</p>
+        </div>
+      </a>
+<a href="11_Future_cal.html" style="text-decoration: none; color: inherit;">
+  <div class="card">
+    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 0.8rem;">
+      <i class="fas fa-crystal-ball" style="font-size: 2rem; color: #1a73e8;"></i>
+      <img src="https://img.icons8.com/?size=128&id=48164&format=png" alt="Future Insights Logo" style="height: 32px; width: auto;">
+    </div>
+    <h3 data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</h3>
+    <p data-en="Get projections and future financial insights." data-hi="प्रोजेक्शन और भविष्य की वित्तीय जानकारी प्राप्त करें।">
+      Get projections and future financial insights.
+    </p>
   </div>
-  <script src="1script_login.js"></script>
+</a>
+      <a href="12_bill_payments.html" style="text-decoration: none; color: inherit;">
+        <div class="card">
+          <i class="fas fa-file-invoice-dollar"></i>
+          <h3 data-en="Bill Payments" data-hi="बिल भुगतान">Bill Payments</h3>
+          <p data-en="Track and manage your recurring bills and maintenance expenses" 
+             data-hi="आपके आवर्ती बिल और रखरखाव व्यय को ट्रैक और प्रबंधित करें">
+            Track and manage your recurring bills and maintenance expenses
+          </p>
+        </div>
+      </a>
+    </div>
+  </section>
+  
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+  <df-messenger
+    intent="WELCOME"
+    chat-title="TaxSarthi"
+    agent-id="c92c3243-048c-48f3-900e-40277f2950d2"
+    language-code="en"
+  ></df-messenger>
+  
+  <script src="dashboard.js"></script>
 </body>
 </html>
