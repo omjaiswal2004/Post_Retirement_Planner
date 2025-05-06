@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Financial Goals</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+
+    :root {
+      --bg-light: #f4f7f9;
+      --bg-dark: #1e1e1e;
+      --text-light: #2c3e50;
+      --text-dark: #f4f7f9;
+      --primary: #2980b9;
+      --success: #27ae60;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: var(--bg-light);
+      color: var(--text-light);
+      margin: 0;
+      padding: 0;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: var(--bg-dark);
+      color: var(--text-dark);
+    }
+
+    nav {
+      background-color: #2c3e50;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    nav .links a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav .toggles {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .container {
+      padding: 2rem;
+    }
+
+    h1, h2 {
+      text-align: center;
+    }
+
+    .goal-section, .form-section {
+      background: white;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    body.dark-mode .goal-section, 
+    body.dark-mode .form-section {
+      background-color: #333;
+      color: white;
+    }
+
+    .progress-bar {
+      background-color: #ecf0f1;
+      border-radius: 10px;
+      overflow: hidden;
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+
+    .progress-fill {
+      height: 15px;
+      background-color: var(--success);
+      text-align: right;
+      padding-right: 5px;
+      color: white;
+      font-size: 12px;
+      line-height: 15px;
+    }
+
+    input, button, select {
+      padding: 8px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      background-color: var(--primary);
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+
+    button:hover {
+      background-color: #1c5980;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 10px;
+    }
+
+    .remove-btn {
+      margin-left: 10px;
+      background: red;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="links">
+      <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+      <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+      <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+      <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+      <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+      <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+      <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+      <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+      <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+      <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+      <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+      <a href="1_index.html" data-en="Logout" data-hi="लॉग आउट">Logout</a>
+    </div>
+    <div class="toggles">
+      <label>
+        <input type="checkbox" id="darkModeToggle" />
+        🌙 Dark Mode
+      </label>
+      <select id="langToggle">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 data-en="My Financial Goals" data-hi="मेरे वित्तीय लक्ष्य">My Financial Goals</h1>
+
+    <!-- Goals Summary Section -->
+    <div class="goal-section">
+      <h2 data-en="Goals Summary" data-hi="लक्ष्य सारांश">Goals Summary</h2>
+      <ul id="summaryList"></ul>
+    </div>
+
+    <!-- Add New Goal Section -->
+    <div class="form-section">
+      <h2 data-en="Add a New Goal" data-hi="नया लक्ष्य जोड़ें">Add a New Goal</h2>
+      <input type="text" id="goalName" placeholder="Goal Name" />
+      <input type="number" id="goalTarget" placeholder="Target ₹" />
+      <input type="number" id="goalCurrent" placeholder="Current ₹" />
+      <button onclick="addGoal()" data-en="Add Goal" data-hi="लक्ष्य जोड़ें">Add Goal</button>
+    </div>
+
+    <!-- Goals Display Sections (Saving, Investment, Healthcare, Vacation) -->
+    <div class="goal-section">
+      <h2 data-en="Saving Goals" data-hi="बचत लक्ष्य">Saving Goals</h2>
+      <ul id="goalList"></ul>
+      <canvas id="savingsChart"></canvas>
+    </div>
+
+    <div class="goal-section">
+      <h2 data-en="Investment Goals" data-hi="निवेश लक्ष्य">Investment Goals</h2>
+      <ul id="investmentGoals"></ul>
+      <canvas id="investmentChart"></canvas>
+    </div>
+
+    <div class="goal-section">
+      <h2 data-en="Healthcare Goals" data-hi="स्वास्थ्य लक्ष्य">Healthcare Goals</h2>
+      <ul id="healthcareGoals"></ul>
+      <canvas id="healthcareChart"></canvas>
+    </div>
+
+    <div class="goal-section">
+      <h2 data-en="Vacation Goals" data-hi="अवकाश लक्ष्य">Vacation Goals</h2>
+      <ul id="vacationGoals"></ul>
+      <canvas id="vacationChart"></canvas>
+    </div>
+  </div>
+
+  <script>
+    let goals = {
+      savings: [
+        { name: "Emergency Fund", target: 10000, current: 3000 },
+        { name: "Retirement", target: 25000, current: 8000 },
+        { name: "Medical", target: 10000, current: 2000 }
+      ],
+      investments: [
+        { name: "Stock Market", target: 50000, current: 10000 },
+        { name: "Real Estate", target: 200000, current: 40000 }
+      ],
+      healthcare: [
+        { name: "Health Insurance", target: 20000, current: 15000 },
+        { name: "Fitness Plan", target: 15000, current: 5000 }
+      ],
+      vacation: [
+        { name: "Europe Trip", target: 200000, current: 50000 },
+        { name: "Beach Vacation", target: 50000, current: 10000 }
+      ]
+    };
+
+    const goalList = document.getElementById("goalList");
+    const summaryList = document.getElementById("summaryList");
+    const investmentGoals = document.getElementById("investmentGoals");
+    const healthcareGoals = document.getElementById("healthcareGoals");
+    const vacationGoals = document.getElementById("vacationGoals");
+
+    function renderGoals() {
+      renderSection("savings", goalList);
+      renderSection("investments", investmentGoals);
+      renderSection("healthcare", healthcareGoals);
+      renderSection("vacation", vacationGoals);
+    }
+
+    function renderSection(goalType, listElement) {
+      listElement.innerHTML = "";
+      goals[goalType].forEach((goal, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `<strong>${goal.name}</strong> - ₹${goal.current} / ₹${goal.target}`;
+        li.appendChild(createProgressBar(goal.current, goal.target));
+        listElement.appendChild(li);
+      });
+    }
+
+    function createProgressBar(current, goal) {
+      const percent = Math.min((current / goal) * 100, 100);
+      const progressBar = document.createElement('div');
+      progressBar.classList.add('progress-bar');
+      const fill = document.createElement('div');
+      fill.classList.add('progress-fill');
+      fill.style.width = `${percent}%`;
+      fill.textContent = `${Math.round(percent)}%`;
+      progressBar.appendChild(fill);
+      return progressBar;
+    }
+
+    function addGoal() {
+      const name = document.getElementById("goalName").value.trim();
+      const target = parseFloat(document.getElementById("goalTarget").value);
+      const current = parseFloat(document.getElementById("goalCurrent").value);
+
+      if (name && !isNaN(target) && !isNaN(current) && target > 0 && current >= 0) {
+        goals.savings.push({ name, target, current });
+        document.getElementById("goalName").value = "";
+        document.getElementById("goalTarget").value = "";
+        document.getElementById("goalCurrent").value = "";
+        renderGoals();
+      } else {
+        alert("Please fill all fields correctly.");
+      }
+    }
+
+    document.getElementById('darkModeToggle').addEventListener('change', function () {
+      document.body.classList.toggle('dark-mode', this.checked);
+    });
+
+    const langToggle = document.getElementById('langToggle');
+
+    langToggle.addEventListener('change', function () {
+      const lang = this.value;
+      document.querySelectorAll('[data-en], [data-hi]').forEach(function (element) {
+        if (lang === 'hi') {
+          element.textContent = element.getAttribute('data-hi');
+        } else {
+          element.textContent = element.getAttribute('data-en');
+        }
+      });
+    });
+
+    // Initialize
+    renderGoals();
+  </script>
+</body>
+</html>

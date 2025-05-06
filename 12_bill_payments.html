@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bill Payment Reminders - Finance Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary-color: #1a2e3f;
+      --secondary-color: #1a73e8;
+      --text-color: #333;
+      --bg-color: #f4f7f9;
+      --card-bg: #ffffff;
+      --nav-bg: #1a2e3f;
+      --nav-text: #ffffff;
+      --border-color: #ddd;
+    }
+
+    .dark-mode {
+      --primary-color: #1a73e8;
+      --secondary-color: #1a2e3f;
+      --text-color: #f0f0f0;
+      --bg-color: #121212;
+      --card-bg: #1e1e1e;
+      --nav-bg: #0d1a26;
+      --nav-text: #ffffff;
+      --border-color: #444;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: var(--bg-color);
+      padding: 2rem;
+      color: var(--text-color);
+      line-height: 1.6;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .bill-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .bill-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .dark-mode .bill-card {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .bill-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .bill-card:hover {
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.3);
+    }
+
+    .bill-card h3 {
+      margin-top: 0;
+      color: var(--primary-color);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .bill-icon {
+      font-size: 1.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: bold;
+    }
+
+    input, select, textarea {
+      padding: 0.8rem;
+      width: 100%;
+      margin-bottom: 0.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 1rem;
+      background-color: var(--card-bg);
+      color: var(--text-color);
+    }
+
+    button {
+      background-color: var(--secondary-color);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 1rem;
+      margin-top: 1rem;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #155ab6;
+    }
+
+    .btn-secondary {
+      background-color: #6c757d;
+    }
+
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+
+    .reminders-list {
+      margin-top: 2rem;
+    }
+
+    .reminder-card {
+      background: var(--card-bg);
+      border-left: 4px solid var(--secondary-color);
+      padding: 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .dark-mode .reminder-card {
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .reminder-details {
+      flex: 1;
+    }
+
+    .reminder-actions {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .action-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      color: var(--text-color);
+      padding: 0.5rem;
+    }
+
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--nav-bg);
+      color: var(--nav-text);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+      margin: -2rem -2rem 2rem -2rem;
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: var(--nav-text);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    .nav-links a:hover {
+      color: #a0c4ff;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--nav-text);
+    }
+
+    .nav-controls {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .theme-toggle, .language-toggle {
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      color: var(--nav-text);
+      transition: background-color 0.3s;
+    }
+
+    .theme-toggle:hover, .language-toggle:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .theme-toggle img, .language-toggle img {
+      width: 20px;
+      margin-right: 5px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.25rem 0.5rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-left: 0.5rem;
+    }
+
+    .status-active {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .dark-mode .status-active {
+      background-color: #155724;
+      color: #d4edda;
+    }
+
+    .status-inactive {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .dark-mode .status-inactive {
+      background-color: #721c24;
+      color: #f8d7da;
+    }
+
+    @media (max-width: 768px) {
+      .nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .nav-links {
+        margin-top: 1rem;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      
+      .nav-links a {
+        margin-left: 0;
+        margin-right: 1rem;
+      }
+      
+      .nav-controls {
+        margin-top: 1rem;
+      }
+
+      .bill-types {
+        grid-template-columns: 1fr;
+      }
+
+      .reminder-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .reminder-actions {
+        align-self: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="logo">💼 Finance Tracker</div>
+    <div style="display: flex; align-items: center;">
+      <div class="nav-links">
+        <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+        <a href="income.html" data-en="Income" data-hi="आय">Income</a>
+        <a href="expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+        <a href="goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+        <a href="reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+        <a href="investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+        <a href="insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+        <a href="finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+        <a href="role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+        <a href="#" data-en="Logout" data-hi="लॉग आउट">Logout</a>
+      </div>
+      <div class="nav-controls">
+        <div class="theme-toggle" onclick="toggleTheme()">
+          <img src="https://cdn-icons-png.flaticon.com/512/581/581601.png" alt="Theme" id="themeIcon">
+          <span id="themeText">Dark Mode</span>
+        </div>
+        <div class="language-toggle" onclick="toggleLanguage()">
+          <img src="https://flagcdn.com/w20/in.png" alt="Hindi">
+          <span id="languageText">हिंदी</span>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h2 data-en="📅 Bill Payment Reminders" data-hi="📅 बिल भुगतान अनुस्मारक">📅 Bill Payment Reminders</h2>
+    
+    <div class="bill-types">
+      <div class="bill-card">
+        <h3><span class="bill-icon">🏠</span> <span data-en="Housing Bills" data-hi="आवास बिल">Housing Bills</span></h3>
+        <form id="housingForm" class="bill-form">
+          <div class="form-group">
+            <label for="housingType" data-en="Bill Type:" data-hi="बिल प्रकार:">Bill Type:</label>
+            <select id="housingType" required>
+              <option value="" disabled selected data-en="Select bill type" data-hi="बिल प्रकार चुनें">Select bill type</option>
+              <option value="rent" data-en="Rent" data-hi="किराया">Rent</option>
+              <option value="mortgage" data-en="Mortgage" data-hi="गिरवी">Mortgage</option>
+              <option value="maintenance" data-en="Maintenance" data-hi="रखरखाव">Maintenance</option>
+              <option value="propertyTax" data-en="Property Tax" data-hi="संपत्ति कर">Property Tax</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="housingAmount" data-en="Amount (₹):" data-hi="राशि (₹):">Amount (₹):</label>
+            <input type="number" id="housingAmount" required placeholder="e.g. 15000" data-en-placeholder="e.g. 15000" data-hi-placeholder="जैसे 15000">
+          </div>
+          <div class="form-group">
+            <label for="housingDueDate" data-en="Due Date:" data-hi="नियत तारीख:">Due Date:</label>
+            <input type="date" id="housingDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="housingReminder" data-en="Reminder Before:" data-hi="अनुस्मारक पहले:">Reminder Before:</label>
+            <select id="housingReminder" required>
+              <option value="1" data-en="1 day before" data-hi="1 दिन पहले">1 day before</option>
+              <option value="3" data-en="3 days before" data-hi="3 दिन पहले">3 days before</option>
+              <option value="7" selected data-en="1 week before" data-hi="1 सप्ताह पहले">1 week before</option>
+              <option value="14" data-en="2 weeks before" data-hi="2 सप्ताह पहले">2 weeks before</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="housingNotes" data-en="Notes:" data-hi="टिप्पणियाँ:">Notes:</label>
+            <textarea id="housingNotes" rows="2" placeholder="Any additional notes" data-en-placeholder="Any additional notes" data-hi-placeholder="कोई अतिरिक्त टिप्पणियाँ"></textarea>
+          </div>
+          <button type="submit" data-en="Set Reminder" data-hi="अनुस्मारक सेट करें">Set Reminder</button>
+          <button type="button" class="btn-secondary" onclick="resetForm('housingForm')" data-en="Reset" data-hi="रीसेट">Reset</button>
+        </form>
+      </div>
+
+      <div class="bill-card">
+        <h3><span class="bill-icon">💡</span> <span data-en="Utility Bills" data-hi="उपयोगिता बिल">Utility Bills</span></h3>
+        <form id="utilityForm" class="bill-form">
+          <div class="form-group">
+            <label for="utilityType" data-en="Bill Type:" data-hi="बिल प्रकार:">Bill Type:</label>
+            <select id="utilityType" required>
+              <option value="" disabled selected data-en="Select bill type" data-hi="बिल प्रकार चुनें">Select bill type</option>
+              <option value="electricity" data-en="Electricity" data-hi="बिजली">Electricity</option>
+              <option value="water" data-en="Water" data-hi="पानी">Water</option>
+              <option value="gas" data-en="Gas" data-hi="गैस">Gas</option>
+              <option value="internet" data-en="Internet" data-hi="इंटरनेट">Internet</option>
+              <option value="mobile" data-en="Mobile" data-hi="मोबाइल">Mobile</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="utilityAmount" data-en="Amount (₹):" data-hi="राशि (₹):">Amount (₹):</label>
+            <input type="number" id="utilityAmount" required placeholder="e.g. 2500" data-en-placeholder="e.g. 2500" data-hi-placeholder="जैसे 2500">
+          </div>
+          <div class="form-group">
+            <label for="utilityDueDate" data-en="Due Date:" data-hi="नियत तारीख:">Due Date:</label>
+            <input type="date" id="utilityDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="utilityReminder" data-en="Reminder Before:" data-hi="अनुस्मारक पहले:">Reminder Before:</label>
+            <select id="utilityReminder" required>
+              <option value="1" data-en="1 day before" data-hi="1 दिन पहले">1 day before</option>
+              <option value="3" data-en="3 days before" data-hi="3 दिन पहले">3 days before</option>
+              <option value="7" selected data-en="1 week before" data-hi="1 सप्ताह पहले">1 week before</option>
+              <option value="14" data-en="2 weeks before" data-hi="2 सप्ताह पहले">2 weeks before</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="utilityNotes" data-en="Notes:" data-hi="टिप्पणियाँ:">Notes:</label>
+            <textarea id="utilityNotes" rows="2" placeholder="Account number, provider details" data-en-placeholder="Account number, provider details" data-hi-placeholder="खाता संख्या, प्रदाता विवरण"></textarea>
+          </div>
+          <button type="submit" data-en="Set Reminder" data-hi="अनुस्मारक सेट करें">Set Reminder</button>
+          <button type="button" class="btn-secondary" onclick="resetForm('utilityForm')" data-en="Reset" data-hi="रीसेट">Reset</button>
+        </form>
+      </div>
+
+      <div class="bill-card">
+        <h3><span class="bill-icon">🚗</span> <span data-en="Vehicle Bills" data-hi="वाहन बिल">Vehicle Bills</span></h3>
+        <form id="vehicleForm" class="bill-form">
+          <div class="form-group">
+            <label for="vehicleType" data-en="Bill Type:" data-hi="बिल प्रकार:">Bill Type:</label>
+            <select id="vehicleType" required>
+              <option value="" disabled selected data-en="Select bill type" data-hi="बिल प्रकार चुनें">Select bill type</option>
+              <option value="loan" data-en="Vehicle Loan" data-hi="वाहन ऋण">Vehicle Loan</option>
+              <option value="insurance" data-en="Insurance" data-hi="बीमा">Insurance</option>
+              <option value="fuel" data-en="Fuel" data-hi="ईंधन">Fuel</option>
+              <option value="maintenance" data-en="Maintenance" data-hi="रखरखाव">Maintenance</option>
+              <option value="roadTax" data-en="Road Tax" data-hi="सड़क कर">Road Tax</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="vehicleAmount" data-en="Amount (₹):" data-hi="राशि (₹):">Amount (₹):</label>
+            <input type="number" id="vehicleAmount" required placeholder="e.g. 5000" data-en-placeholder="e.g. 5000" data-hi-placeholder="जैसे 5000">
+          </div>
+          <div class="form-group">
+            <label for="vehicleDueDate" data-en="Due Date:" data-hi="नियत तारीख:">Due Date:</label>
+            <input type="date" id="vehicleDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="vehicleReminder" data-en="Reminder Before:" data-hi="अनुस्मारक पहले:">Reminder Before:</label>
+            <select id="vehicleReminder" required>
+              <option value="1" data-en="1 day before" data-hi="1 दिन पहले">1 day before</option>
+              <option value="3" data-en="3 days before" data-hi="3 दिन पहले">3 days before</option>
+              <option value="7" selected data-en="1 week before" data-hi="1 सप्ताह पहले">1 week before</option>
+              <option value="14" data-en="2 weeks before" data-hi="2 सप्ताह पहले">2 weeks before</option>
+              <option value="30" data-en="1 month before" data-hi="1 महीने पहले">1 month before</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="vehicleNotes" data-en="Notes:" data-hi="टिप्पणियाँ:">Notes:</label>
+            <textarea id="vehicleNotes" rows="2" placeholder="Vehicle details, policy number" data-en-placeholder="Vehicle details, policy number" data-hi-placeholder="वाहन विवरण, पॉलिसी नंबर"></textarea>
+          </div>
+          <button type="submit" data-en="Set Reminder" data-hi="अनुस्मारक सेट करें">Set Reminder</button>
+          <button type="button" class="btn-secondary" onclick="resetForm('vehicleForm')" data-en="Reset" data-hi="रीसेट">Reset</button>
+        </form>
+      </div>
+
+      <div class="bill-card">
+        <h3><span class="bill-icon">💳</span> <span data-en="Credit Cards & Loans" data-hi="क्रेडिट कार्ड और ऋण">Credit Cards & Loans</span></h3>
+        <form id="creditForm" class="bill-form">
+          <div class="form-group">
+            <label for="creditType" data-en="Bill Type:" data-hi="बिल प्रकार:">Bill Type:</label>
+            <select id="creditType" required>
+              <option value="" disabled selected data-en="Select bill type" data-hi="बिल प्रकार चुनें">Select bill type</option>
+              <option value="creditCard" data-en="Credit Card" data-hi="क्रेडिट कार्ड">Credit Card</option>
+              <option value="personalLoan" data-en="Personal Loan" data-hi="व्यक्तिगत ऋण">Personal Loan</option>
+              <option value="educationLoan" data-en="Education Loan" data-hi="शिक्षा ऋण">Education Loan</option>
+              <option value="otherLoan" data-en="Other Loan" data-hi="अन्य ऋण">Other Loan</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="creditAmount" data-en="Amount (₹):" data-hi="राशि (₹):">Amount (₹):</label>
+            <input type="number" id="creditAmount" required placeholder="e.g. 10000" data-en-placeholder="e.g. 10000" data-hi-placeholder="जैसे 10000">
+          </div>
+          <div class="form-group">
+            <label for="creditDueDate" data-en="Due Date:" data-hi="नियत तारीख:">Due Date:</label>
+            <input type="date" id="creditDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="creditReminder" data-en="Reminder Before:" data-hi="अनुस्मारक पहले:">Reminder Before:</label>
+            <select id="creditReminder" required>
+              <option value="1" data-en="1 day before" data-hi="1 दिन पहले">1 day before</option>
+              <option value="3" selected data-en="3 days before" data-hi="3 दिन पहले">3 days before</option>
+              <option value="7" data-en="1 week before" data-hi="1 सप्ताह पहले">1 week before</option>
+              <option value="14" data-en="2 weeks before" data-hi="2 सप्ताह पहले">2 weeks before</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="creditNotes" data-en="Notes:" data-hi="टिप्पणियाँ:">Notes:</label>
+            <textarea id="creditNotes" rows="2" placeholder="Card/loan number, bank details" data-en-placeholder="Card/loan number, bank details" data-hi-placeholder="कार्ड/ऋण संख्या, बैंक विवरण"></textarea>
+          </div>
+          <button type="submit" data-en="Set Reminder" data-hi="अनुस्मारक सेट करें">Set Reminder</button>
+          <button type="button" class="btn-secondary" onclick="resetForm('creditForm')" data-en="Reset" data-hi="रीसेट">Reset</button>
+        </form>
+      </div>
+
+      <div class="bill-card">
+        <h3><span class="bill-icon">🏥</span> <span data-en="Health & Insurance" data-hi="स्वास्थ्य और बीमा">Health & Insurance</span></h3>
+        <form id="healthForm" class="bill-form">
+          <div class="form-group">
+            <label for="healthType" data-en="Bill Type:" data-hi="बिल प्रकार:">Bill Type:</label>
+            <select id="healthType" required>
+              <option value="" disabled selected data-en="Select bill type" data-hi="बिल प्रकार चुनें">Select bill type</option>
+              <option value="healthInsurance" data-en="Health Insurance" data-hi="स्वास्थ्य बीमा">Health Insurance</option>
+              <option value="lifeInsurance" data-en="Life Insurance" data-hi="जीवन बीमा">Life Insurance</option>
+              <option value="doctor" data-en="Doctor Visits" data-hi="डॉक्टर के दौरे">Doctor Visits</option>
+              <option value="medicine" data-en="Medicines" data-hi="दवाइयाँ">Medicines</option>
+              <option value="otherMedical" data-en="Other Medical" data-hi="अन्य चिकित्सा">Other Medical</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="healthAmount" data-en="Amount (₹):" data-hi="राशि (₹):">Amount (₹):</label>
+            <input type="number" id="healthAmount" required placeholder="e.g. 8000" data-en-placeholder="e.g. 8000" data-hi-placeholder="जैसे 8000">
+          </div>
+          <div class="form-group">
+            <label for="healthDueDate" data-en="Due Date:" data-hi="नियत तारीख:">Due Date:</label>
+            <input type="date" id="healthDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="healthReminder" data-en="Reminder Before:" data-hi="अनुस्मारक पहले:">Reminder Before:</label>
+            <select id="healthReminder" required>
+              <option value="1" data-en="1 day before" data-hi="1 दिन पहले">1 day before</option>
+              <option value="3" data-en="3 days before" data-hi="3 दिन पहले">3 days before</option>
+              <option value="7" selected data-en="1 week before" data-hi="1 सप्ताह पहले">1 week before</option>
+              <option value="14" data-en="2 weeks before" data-hi="2 सप्ताह पहले">2 weeks before</option>
+              <option value="30" data-en="1 month before" data-hi="1 महीने पहले">1 month before</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="healthNotes" data-en="Notes:" data-hi="टिप्पणियाँ:">Notes:</label>
+            <textarea id="healthNotes" rows="2" placeholder="Policy number, provider details" data-en-placeholder="Policy number, provider details" data-hi-placeholder="पॉलिसी नंबर, प्रदाता विवरण"></textarea>
+          </div>
+          <button type="submit" data-en="Set Reminder" data-hi="अनुस्मारक सेट करें">Set Reminder</button>
+          <button type="button" class="btn-secondary" onclick="resetForm('healthForm')" data-en="Reset" data-hi="रीसेट">Reset</button>
+        </form>
+      </div>
+
+      <div class="bill-card">
+        <h3><span class="bill-icon">🎓</span> <span data-en="Education & Subscriptions" data-hi="शिक्षा और सदस्यता">Education & Subscriptions</span></h3>
+        <form id="educationForm" class="bill-form">
+          <div class="form-group">
+            <label for="educationType" data-en="Bill Type:" data-hi="बिल प्रकार:">Bill Type:</label>
+            <select id="educationType" required>
+              <option value="" disabled selected data-en="Select bill type" data-hi="बिल प्रकार चुनें">Select bill type</option>
+              <option value="tuition" data-en="Tuition Fees" data-hi="ट्यूशन फीस">Tuition Fees</option>
+              <option value="school" data-en="School Fees" data-hi="स्कूल फीस">School Fees</option>
+              <option value="college" data-en="College Fees" data-hi="कॉलेज फीस">College Fees</option>
+              <option value="streaming" data-en="Streaming Services" data-hi="स्ट्रीमिंग सेवाएं">Streaming Services</option>
+              <option value="magazine" data-en="Magazines" data-hi="पत्रिकाएं">Magazines</option>
+              <option value="otherSub" data-en="Other Subscriptions" data-hi="अन्य सदस्यताएं">Other Subscriptions</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="educationAmount" data-en="Amount (₹):" data-hi="राशि (₹):">Amount (₹):</label>
+            <input type="number" id="educationAmount" required placeholder="e.g. 5000" data-en-placeholder="e.g. 5000" data-hi-placeholder="जैसे 5000">
+          </div>
+          <div class="form-group">
+            <label for="educationDueDate" data-en="Due Date:" data-hi="नियत तारीख:">Due Date:</label>
+            <input type="date" id="educationDueDate" required>
+          </div>
+          <div class="form-group">
+            <label for="educationReminder" data-en="Reminder Before:" data-hi="अनुस्मारक पहले:">Reminder Before:</label>
+            <select id="educationReminder" required>
+              <option value="1" data-en="1 day before" data-hi="1 दिन पहले">1 day before</option>
+              <option value="3" data-en="3 days before" data-hi="3 दिन पहले">3 days before</option>
+              <option value="7" selected data-en="1 week before" data-hi="1 सप्ताह पहले">1 week before</option>
+              <option value="14" data-en="2 weeks before" data-hi="2 सप्ताह पहले">2 weeks before</option>
+              <option value="30" data-en="1 month before" data-hi="1 महीने पहले">1 month before</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="educationNotes" data-en="Notes:" data-hi="टिप्पणियाँ:">Notes:</label>
+            <textarea id="educationNotes" rows="2" placeholder="Institute name, subscription details" data-en-placeholder="Institute name, subscription details" data-hi-placeholder="संस्थान का नाम, सदस्यता विवरण"></textarea>
+          </div>
+          <button type="submit" data-en="Set Reminder" data-hi="अनुस्मारक सेट करें">Set Reminder</button>
+          <button type="button" class="btn-secondary" onclick="resetForm('educationForm')" data-en="Reset" data-hi="रीसेट">Reset</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="reminders-list">
+      <h3 data-en="Your Active Reminders" data-hi="आपके सक्रिय अनुस्मारक">Your Active Reminders</h3>
+      <div id="activeReminders">
+        <!-- Reminders will be added here dynamically -->
+        <div class="reminder-card">
+          <div class="reminder-details">
+            <h4>Electricity Bill <span class="status-badge status-active" data-en="Active" data-hi="सक्रिय">Active</span></h4>
+            <p data-en="Amount: ₹2500 | Due: May 15, 2024 | Reminder: May 8, 2024" data-hi="राशि: ₹2500 | नियत तारीख: 15 मई, 2024 | अनुस्मारक: 8 मई, 2024">Amount: ₹2500 | Due: May 15, 2024 | Reminder: May 8, 2024</p>
+            <small data-en="Notes: Account #12345, BSES Rajdhani" data-hi="टिप्पणियाँ: खाता संख्या #12345, बीएसईएस राजधानी">Notes: Account #12345, BSES Rajdhani</small>
+          </div>
+          <div class="reminder-actions">
+            <button class="action-btn" title="Edit" data-en-title="Edit" data-hi-title="संपादित करें">✏️</button>
+            <button class="action-btn" title="Mark Paid" data-en-title="Mark Paid" data-hi-title="भुगतान किया हुआ चिह्नित करें">✅</button>
+            <button class="action-btn" title="Delete" data-en-title="Delete" data-hi-title="हटाएं">🗑️</button>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="margin-top: 2rem;" data-en="Payment History" data-hi="भुगतान इतिहास">Payment History</h3>
+      <div id="paymentHistory">
+        <!-- Payment history will be added here dynamically -->
+        <div class="reminder-card">
+          <div class="reminder-details">
+            <h4>Credit Card Payment <span class="status-badge status-inactive" data-en="Paid" data-hi="भुगतान किया गया">Paid</span></h4>
+            <p data-en="Amount: ₹10000 | Paid: May 5, 2024 | Due: May 10, 2024" data-hi="राशि: ₹10000 | भुगतान किया गया: 5 मई, 2024 | नियत तारीख: 10 मई, 2024">Amount: ₹10000 | Paid: May 5, 2024 | Due: May 10, 2024</p>
+            <small data-en="Notes: HDFC Bank Card ending with 4567" data-hi="टिप्पणियाँ: एचडीएफसी बैंक कार्ड अंत 4567">Notes: HDFC Bank Card ending with 4567</small>
+          </div>
+          <div class="reminder-actions">
+            <button class="action-btn" title="Repeat" data-en-title="Repeat" data-hi-title="दोहराएं">🔁</button>
+            <button class="action-btn" title="Delete" data-en-title="Delete" data-hi-title="हटाएं">🗑️</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentLanguage = 'en'; // Default language is English
+    let darkMode = false; // Default theme is light
+    
+    // Sample data for demonstration
+    let reminders = [
+      {
+        id: 1,
+        category: "Utility",
+        type: "Electricity",
+        amount: 2500,
+        dueDate: "2024-05-15",
+        reminderDate: "2024-05-08",
+        notes: "Account #12345, BSES Rajdhani",
+        status: "active"
+      },
+      {
+        id: 2,
+        category: "Credit",
+        type: "Credit Card",
+        amount: 10000,
+        dueDate: "2024-05-10",
+        paidDate: "2024-05-05",
+        notes: "HDFC Bank Card ending with 4567",
+        status: "paid"
+      }
+    ];
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+      loadReminders();
+      
+      // Add form submit event listeners
+      document.querySelectorAll('.bill-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+          e.preventDefault();
+          addReminder(this.id);
+        });
+      });
+    });
+
+    function toggleTheme() {
+      darkMode = !darkMode;
+      if (darkMode) {
+        document.body.classList.add('dark-mode');
+        document.getElementById('themeText').textContent = currentLanguage === 'en' ? 'Light Mode' : 'लाइट मोड';
+        document.getElementById('themeIcon').src = 'https://cdn-icons-png.flaticon.com/512/581/581601.png';
+      } else {
+        document.body.classList.remove('dark-mode');
+        document.getElementById('themeText').textContent = currentLanguage === 'en' ? 'Dark Mode' : 'डार्क मोड';
+        document.getElementById('themeIcon').src = 'https://cdn-icons-png.flaticon.com/512/3618/3618908.png';
+      }
+    }
+    
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+      updateLanguage();
+    }
+    
+    function updateLanguage() {
+      // Update all elements with data attributes
+      document.querySelectorAll('[data-en], [data-hi]').forEach(element => {
+        if (element.tagName === 'OPTION') {
+          // For option elements, we need to update both value and display text
+          if (element.hasAttribute('data-en') && element.hasAttribute('data-hi')) {
+            element.textContent = currentLanguage === 'en' ? element.getAttribute('data-en') : element.getAttribute('data-hi');
+          }
+        } else if (element.hasAttribute('data-en') && element.hasAttribute('data-hi')) {
+          element.textContent = currentLanguage === 'en' ? element.getAttribute('data-en') : element.getAttribute('data-hi');
+        }
+      });
+      
+      // Update placeholders
+      document.querySelectorAll('[data-en-placeholder], [data-hi-placeholder]').forEach(input => {
+        if (currentLanguage === 'en') {
+          input.placeholder = input.getAttribute('data-en-placeholder') || '';
+        } else {
+          input.placeholder = input.getAttribute('data-hi-placeholder') || '';
+        }
+      });
+      
+      // Update title attributes
+      document.querySelectorAll('[data-en-title], [data-hi-title]').forEach(btn => {
+        if (currentLanguage === 'en') {
+          btn.title = btn.getAttribute('data-en-title') || '';
+        } else {
+          btn.title = btn.getAttribute('data-hi-title') || '';
+        }
+      });
+      
+      // Update language toggle text
+      document.getElementById('languageText').textContent = currentLanguage === 'en' ? 'हिंदी' : 'English';
+      
+      // Update theme toggle text
+      document.getElementById('themeText').textContent = currentLanguage === 'en' 
+        ? (darkMode ? 'Light Mode' : 'Dark Mode') 
+        : (darkMode ? 'लाइट मोड' : 'डार्क मोड');
+    }
+
+    function resetForm(formId) {
+      document.getElementById(formId).reset();
+    }
+
+    function addReminder(formId) {
+      const form = document.getElementById(formId);
+      const category = formId.replace('Form', '');
+      const type = form.querySelector('select').value;
+      const amount = form.querySelector('input[type="number"]').value;
+      const dueDate = form.querySelector('input[type="date"]').value;
+      const reminderDays = form.querySelectorAll('select')[1].value;
+      const notes = form.querySelector('textarea').value;
+      
+      // Calculate reminder date
+      const dueDateObj = new Date(dueDate);
+      dueDateObj.setDate(dueDateObj.getDate() - parseInt(reminderDays));
+      const reminderDate = dueDateObj.toISOString().split('T')[0];
+      
+      // Create new reminder object
+      const newReminder = {
+        id: Date.now(),
+        category: category,
+        type: type,
+        amount: amount,
+        dueDate: dueDate,
+        reminderDate: reminderDate,
+        notes: notes,
+        status: "active"
+      };
+      
+      // Add to reminders array
+      reminders.push(newReminder);
+      
+      // Reload reminders
+      loadReminders();
+      
+      // Reset form
+      form.reset();
+      
+      // Check if due date has passed
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Reset time part for accurate comparison
+      const billDueDate = new Date(dueDate);
+      
+      if (billDueDate < today) {
+        alert(currentLanguage === 'en' 
+          ? `Warning: The due date (${formatDate(dueDate)}) for this bill has already passed!` 
+          : `चेतावनी: इस बिल की नियत तारीख (${formatDate(dueDate, true)}) पहले ही बीत चुकी है!`);
+      } else {
+        // Show success message only if due date hasn't passed
+        alert(currentLanguage === 'en' 
+          ? 'Reminder added successfully!' 
+          : 'अनुस्मारक सफलतापूर्वक जोड़ा गया!');
+      }
+    }
+
+    function loadReminders() {
+      const activeRemindersContainer = document.getElementById('activeReminders');
+      const paymentHistoryContainer = document.getElementById('paymentHistory');
+      
+      // Clear existing reminders
+      activeRemindersContainer.innerHTML = '';
+      paymentHistoryContainer.innerHTML = '';
+      
+      // Filter and display active reminders
+      const activeReminders = reminders.filter(r => r.status === 'active');
+      if (activeReminders.length === 0) {
+        activeRemindersContainer.innerHTML = `<p>${currentLanguage === 'en' ? 'No active reminders' : 'कोई सक्रिय अनुस्मारक नहीं'}</p>`;
+      } else {
+        activeReminders.forEach(reminder => {
+          activeRemindersContainer.appendChild(createReminderCard(reminder));
+        });
+      }
+      
+      // Filter and display payment history
+      const paidReminders = reminders.filter(r => r.status === 'paid');
+      if (paidReminders.length === 0) {
+        paymentHistoryContainer.innerHTML = `<p>${currentLanguage === 'en' ? 'No payment history' : 'कोई भुगतान इतिहास नहीं'}</p>`;
+      } else {
+        paidReminders.forEach(reminder => {
+          paymentHistoryContainer.appendChild(createReminderCard(reminder));
+        });
+      }
+    }
+
+    function createReminderCard(reminder) {
+      const card = document.createElement('div');
+      card.className = 'reminder-card';
+      
+      const details = document.createElement('div');
+      details.className = 'reminder-details';
+      
+      const title = document.createElement('h4');
+      title.textContent = `${reminder.type} ${currentLanguage === 'en' ? 'Bill' : 'बिल'}`;
+      
+      const statusBadge = document.createElement('span');
+      statusBadge.className = `status-badge status-${reminder.status === 'active' ? 'active' : 'inactive'}`;
+      statusBadge.textContent = reminder.status === 'active' 
+        ? (currentLanguage === 'en' ? 'Active' : 'सक्रिय') 
+        : (currentLanguage === 'en' ? 'Paid' : 'भुगतान किया गया');
+      title.appendChild(statusBadge);
+      
+      const dueInfo = document.createElement('p');
+      if (reminder.status === 'active') {
+        dueInfo.textContent = currentLanguage === 'en' 
+          ? `Amount: ₹${reminder.amount} | Due: ${formatDate(reminder.dueDate)} | Reminder: ${formatDate(reminder.reminderDate)}`
+          : `राशि: ₹${reminder.amount} | नियत तारीख: ${formatDate(reminder.dueDate, true)} | अनुस्मारक: ${formatDate(reminder.reminderDate, true)}`;
+      } else {
+        dueInfo.textContent = currentLanguage === 'en' 
+          ? `Amount: ₹${reminder.amount} | Paid: ${formatDate(reminder.paidDate)} | Due: ${formatDate(reminder.dueDate)}`
+          : `राशि: ₹${reminder.amount} | भुगतान किया गया: ${formatDate(reminder.paidDate, true)} | नियत तारीख: ${formatDate(reminder.dueDate, true)}`;
+      }
+      
+      const notes = document.createElement('small');
+      notes.textContent = `${currentLanguage === 'en' ? 'Notes:' : 'टिप्पणियाँ:'} ${reminder.notes}`;
+      
+      details.appendChild(title);
+      details.appendChild(dueInfo);
+      details.appendChild(notes);
+      
+      const actions = document.createElement('div');
+      actions.className = 'reminder-actions';
+      
+      if (reminder.status === 'active') {
+        const editBtn = document.createElement('button');
+        editBtn.className = 'action-btn';
+        editBtn.innerHTML = '✏️';
+        editBtn.title = currentLanguage === 'en' ? 'Edit' : 'संपादित करें';
+        editBtn.onclick = () => editReminder(reminder.id);
+        
+        const markPaidBtn = document.createElement('button');
+        markPaidBtn.className = 'action-btn';
+        markPaidBtn.innerHTML = '✅';
+        markPaidBtn.title = currentLanguage === 'en' ? 'Mark Paid' : 'भुगतान किया हुआ चिह्नित करें';
+        markPaidBtn.onclick = () => markAsPaid(reminder.id);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'action-btn';
+        deleteBtn.innerHTML = '🗑️';
+        deleteBtn.title = currentLanguage === 'en' ? 'Delete' : 'हटाएं';
+        deleteBtn.onclick = () => deleteReminder(reminder.id);
+        
+        actions.appendChild(editBtn);
+        actions.appendChild(markPaidBtn);
+        actions.appendChild(deleteBtn);
+      } else {
+        const repeatBtn = document.createElement('button');
+        repeatBtn.className = 'action-btn';
+        repeatBtn.innerHTML = '🔁';
+        repeatBtn.title = currentLanguage === 'en' ? 'Repeat' : 'दोहराएं';
+        repeatBtn.onclick = () => repeatReminder(reminder.id);
+        
+        const deleteBtn = document.createElement('button');
+        deleteBtn.className = 'action-btn';
+        deleteBtn.innerHTML = '🗑️';
+        deleteBtn.title = currentLanguage === 'en' ? 'Delete' : 'हटाएं';
+        deleteBtn.onclick = () => deleteReminder(reminder.id);
+        
+        actions.appendChild(repeatBtn);
+        actions.appendChild(deleteBtn);
+      }
+      
+      card.appendChild(details);
+      card.appendChild(actions);
+      
+      return card;
+    }
+
+    function formatDate(dateString, hindi = false) {
+      const date = new Date(dateString);
+      if (hindi) {
+        const options = { day: 'numeric', month: 'long', year: 'numeric' };
+        return date.toLocaleDateString('hi-IN', options);
+      } else {
+        const options = { year: 'numeric', month: 'short', day: 'numeric' };
+        return date.toLocaleDateString('en-US', options);
+      }
+    }
+
+    function editReminder(id) {
+      const reminder = reminders.find(r => r.id === id);
+      if (reminder) {
+        // In a real app, you would populate a form with this data
+        alert(currentLanguage === 'en' 
+          ? `Editing reminder for ${reminder.type} bill` 
+          : `${reminder.type} बिल के लिए अनुस्मारक संपादित करें`);
+      }
+    }
+
+    function markAsPaid(id) {
+      const reminder = reminders.find(r => r.id === id);
+      if (reminder) {
+        reminder.status = 'paid';
+        reminder.paidDate = new Date().toISOString().split('T')[0];
+        loadReminders();
+      }
+    }
+
+    function deleteReminder(id) {
+      if (confirm(currentLanguage === 'en' 
+          ? 'Are you sure you want to delete this reminder?' 
+          : 'क्या आप वाकई इस अनुस्मारक को हटाना चाहते हैं?')) {
+        reminders = reminders.filter(r => r.id !== id);
+        loadReminders();
+      }
+    }
+
+    function repeatReminder(id) {
+      const original = reminders.find(r => r.id === id);
+      if (original) {
+        // Create a new reminder based on the original
+        const newReminder = {
+          ...original,
+          id: Date.now(),
+          status: 'active',
+          paidDate: undefined
+        };
+        
+        // Calculate new dates (one month later for demonstration)
+        const dueDate = new Date(original.dueDate);
+        dueDate.setMonth(dueDate.getMonth() + 1);
+        newReminder.dueDate = dueDate.toISOString().split('T')[0];
+        
+        const reminderDate = new Date(original.reminderDate);
+        reminderDate.setMonth(reminderDate.getMonth() + 1);
+        newReminder.reminderDate = reminderDate.toISOString().split('T')[0];
+        
+        reminders.push(newReminder);
+        loadReminders();
+      }
+    }
+  </script>
+</body>
+</html>
+

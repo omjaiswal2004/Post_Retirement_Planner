@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Tax Calculator 2025</title>
+    <link rel="stylesheet" href="4_style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 data-en="Income Tax Calculator 2025" data-hi="आयकर कैलकुलेटर 2025">Income Tax Calculator 2025</h1>
+            <div class="nav-controls">
+                <button id="languageToggle" onclick="toggleLanguage()">
+                    <i class="fas fa-language"></i>
+                    <span id="languageText">हिंदी</span>
+                </button>
+                <button id="themeToggle" onclick="toggleTheme()">
+                    <i class="fas fa-moon" id="themeIcon"></i>
+                    <span id="themeText">Dark Mode</span>
+                </button>
+            </div>
+        </header>
+
+        <div class="tabs">
+            <div class="tab active" onclick="switchTab('old')" data-en="Old Regime" data-hi="पुरानी व्यवस्था">Old Regime</div>
+            <div class="tab" onclick="switchTab('new')" data-en="New Regime" data-hi="नई व्यवस्था">New Regime</div>
+        </div>
+
+        <form id="taxForm">
+            <input type="hidden" id="regime" value="old">
+            
+            <div class="calculator-container">
+                <div class="form-section">
+                    <div class="form-group">
+                        <label for="employmentType" data-en="Employment Type" data-hi="रोजगार प्रकार">Employment Type</label>
+                        <select id="employmentType">
+                            <option value="salaried" data-en="Salaried" data-hi="वेतनभोगी">Salaried</option>
+                            <option value="non-salaried" data-en="Non-Salaried" data-hi="गैर-वेतनभोगी">Non-Salaried</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="age" data-en="Age Group" data-hi="आयु वर्ग">Age Group</label>
+                        <select id="age">
+                            <option value="general" data-en="General (Below 60)" data-hi="सामान्य (60 से कम)">General (Below 60)</option>
+                            <option value="senior" data-en="Senior Citizen (60-80)" data-hi="वरिष्ठ नागरिक (60-80)">Senior Citizen (60-80)</option>
+                            <option value="superSenior" data-en="Super Senior Citizen (80+)" data-hi="अति वरिष्ठ नागरिक (80+)">Super Senior Citizen (80+)</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="income" data-en="Gross Annual Income (₹)" data-hi="कुल वार्षिक आय (₹)">Gross Annual Income (₹)</label>
+                        <input type="number" id="income" placeholder="Enter your annual income" data-en-placeholder="Enter your annual income" data-hi-placeholder="अपनी वार्षिक आय दर्ज करें">
+                    </div>
+
+                    <div class="tab-content active" id="oldRegimeDeductions">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="standardDeduction">
+                            <label for="standardDeduction" data-en="Standard Deduction (₹50,000)" data-hi="मानक कटौती (₹50,000)">Standard Deduction (₹50,000)</label>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="section80C" data-en="Section 80C Investments (Max ₹1.5L)" data-hi="धारा 80C निवेश (अधिकतम ₹1.5L)">Section 80C Investments (Max ₹1.5L)</label>
+                            <input type="number" id="section80C" max="150000" placeholder="Up to ₹1,50,000" data-en-placeholder="Up to ₹1,50,000" data-hi-placeholder="₹1,50,000 तक">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="section80D" data-en="Section 80D (Health Insurance)" data-hi="धारा 80D (स्वास्थ्य बीमा)">Section 80D (Health Insurance)</label>
+                            <input type="number" id="section80D" placeholder="Health insurance premium" data-en-placeholder="Health insurance premium" data-hi-placeholder="स्वास्थ्य बीमा प्रीमियम">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hra" data-en="HRA Exemption" data-hi="HRA छूट">HRA Exemption</label>
+                            <input type="number" id="hra" placeholder="House Rent Allowance" data-en-placeholder="House Rent Allowance" data-hi-placeholder="हाउस रेंट अलाउंस">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="otherDeductions" data-en="Other Deductions" data-hi="अन्य कटौतियाँ">Other Deductions</label>
+                            <input type="number" id="otherDeductions" placeholder="Other tax savings" data-en-placeholder="Other tax savings" data-hi-placeholder="अन्य कर बचत">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-section" id="result" style="display: none;">
+                    <h2 data-en="Tax Calculation Results" data-hi="कर गणना परिणाम">Tax Calculation Results</h2>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Gross Income:" data-hi="कुल आय:">Gross Income:</span>
+                        <span class="result-value" id="grossIncome">₹0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Total Deductions:" data-hi="कुल कटौतियाँ:">Total Deductions:</span>
+                        <span class="result-value" id="totalDeductions">₹0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Taxable Income:" data-hi="कर योग्य आय:">Taxable Income:</span>
+                        <span class="result-value" id="taxableIncome">₹0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Income Tax:" data-hi="आयकर:">Income Tax:</span>
+                        <span class="result-value" id="incomeTax">₹0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Health & Education Cess (4%):" data-hi="स्वास्थ्य और शिक्षा उपकर (4%):">Health & Education Cess (4%):</span>
+                        <span class="result-value" id="cess">₹0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Total Tax:" data-hi="कुल कर:">Total Tax:</span>
+                        <span class="result-value" id="totalTax">₹0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Monthly Tax:" data-hi="मासिक कर:">Monthly Tax:</span>
+                        <span class="result-value" id="monthlyTax">₹0</span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label" data-en="Post-Tax Income:" data-hi="कर के बाद आय:">Post-Tax Income:</span>
+                        <span class="result-value" id="postTaxIncome">₹0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <button type="submit" data-en="Calculate Tax" data-hi="कर की गणना करें">Calculate Tax</button>
+                <button type="button" onclick="resetForm()" data-en="Reset" data-hi="रीसेट">Reset</button>
+            </div>
+        </form>
+
+        <div class="tab-content" style="margin-top: 30px;">
+            <h2 data-en="Income Tax Slabs - New Regime" data-hi="आयकर स्लैब - नई व्यवस्था">Income Tax Slabs - New Regime</h2>
+            <table class="slab-table">
+                <thead>
+                    <tr>
+                        <th data-en="Income Range" data-hi="आय सीमा">Income Range</th>
+                        <th data-en="Tax Rate" data-hi="कर दर">Tax Rate</th>
+                        <th data-en="Tax Amount" data-hi="कर राशि">Tax Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td data-en="Up to ₹12,75,000" data-hi="₹12,75,000 तक">Up to ₹12,75,000</td>
+                        <td data-en="No tax" data-hi="कोई कर नहीं">No tax</td>
+                        <td>₹0</td>
+                    </tr>
+                    <tr>
+                        <td data-en="₹12,75,001 to ₹13,00,000" data-hi="₹12,75,001 से ₹13,00,000">₹12,75,001 to ₹13,00,000</td>
+                        <td>5%</td>
+                        <td>₹26,000</td>
+                    </tr>
+                    <tr>
+                        <td data-en="₹13,00,001 to ₹13,50,000" data-hi="₹13,00,001 से ₹13,50,000">₹13,00,001 to ₹13,50,000</td>
+                        <td>10%</td>
+                        <td>₹74,100</td>
+                    </tr>
+                    <tr>
+                        <td data-en="₹13,50,001 to ₹14,00,000" data-hi="₹13,50,001 से ₹14,00,000">₹13,50,001 to ₹14,00,000</td>
+                        <td>15%</td>
+                        <td>₹81,900</td>
+                    </tr>
+                    <tr>
+                        <td data-en="₹14,00,001 to ₹14,50,000" data-hi="₹14,00,001 से ₹14,50,000">₹14,00,001 to ₹14,50,000</td>
+                        <td>20%</td>
+                        <td>₹89,700</td>
+                    </tr>
+                    <tr>
+                        <td data-en="Above ₹14,50,000" data-hi="₹14,50,000 से अधिक">Above ₹14,50,000</td>
+                        <td>30%</td>
+                        <td>30% of income above ₹14.5L</td>
+                    </tr>
+                </tbody>
+            </table>
+            
+            <p style="margin-top: 20px;" data-en="The new tax regime provides no tax liability for income up to ₹12,75,000 for salaried individuals (₹12,00,000 for others) due to the ₹75,000 standard deduction. The tax rates then increase progressively for higher income brackets as shown in the table above. Taxpayers can choose between the old and new regimes based on which is more beneficial for their situation." 
+               data-hi="नई कर व्यवस्था वेतनभोगी व्यक्तियों के लिए ₹12,75,000 तक (अन्य के लिए ₹12,00,000 तक) कोई कर दायित्व नहीं प्रदान करती है, जो ₹75,000 की मानक कटौती के कारण है। कर की दरें फिर उपरोक्त तालिका में दिखाए अनुसार उच्च आय वर्ग के लिए क्रमिक रूप से बढ़ती हैं। करदाता अपनी स्थिति के लिए जो अधिक लाभदायक हो, उसके आधार पर पुरानी और नई व्यवस्था के बीच चयन कर सकते हैं।">
+                The new tax regime provides no tax liability for income up to ₹12,75,000 for salaried individuals (₹12,00,000 for others) due to the ₹75,000 standard deduction. The tax rates then increase progressively for higher income brackets as shown in the table above. Taxpayers can choose between the old and new regimes based on which is more beneficial for their situation.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let currentLanguage = 'en';
+        let darkMode = false;
+
+        function toggleTheme() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('dark-mode');
+            
+            const themeText = document.getElementById('themeText');
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (darkMode) {
+                themeText.textContent = currentLanguage === 'en' ? 'Light Mode' : 'लाइट मोड';
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            } else {
+                themeText.textContent = currentLanguage === 'en' ? 'Dark Mode' : 'डार्क मोड';
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+            }
+        }
+
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+            updateLanguage();
+        }
+
+        function updateLanguage() {
+            document.querySelectorAll('[data-en], [data-hi]').forEach(element => {
+                if (element.tagName === 'OPTION') {
+                    if (element.hasAttribute('data-en') && element.hasAttribute('data-hi')) {
+                        element.textContent = currentLanguage === 'en' ? element.getAttribute('data-en') : element.getAttribute('data-hi');
+                    }
+                } else if (element.hasAttribute('data-en') && element.hasAttribute('data-hi')) {
+                    element.textContent = currentLanguage === 'en' ? element.getAttribute('data-en') : element.getAttribute('data-hi');
+                }
+            });
+
+            document.querySelectorAll('[data-en-placeholder], [data-hi-placeholder]').forEach(input => {
+                input.placeholder = currentLanguage === 'en' ? 
+                    (input.getAttribute('data-en-placeholder') || '') : 
+                    (input.getAttribute('data-hi-placeholder') || '');
+            });
+
+            document.getElementById('languageText').textContent = currentLanguage === 'en' ? 'हिंदी' : 'English';
+            
+            const themeText = document.getElementById('themeText');
+            if (darkMode) {
+                themeText.textContent = currentLanguage === 'en' ? 'Light Mode' : 'लाइट मोड';
+            } else {
+                themeText.textContent = currentLanguage === 'en' ? 'Dark Mode' : 'डार्क मोड';
+            }
+
+            if (currentLanguage === 'hi') {
+                document.body.classList.add('hindi');
+            } else {
+                document.body.classList.remove('hindi');
+            }
+        }
+
+        function switchTab(regime) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+            if (regime === 'old') {
+                document.querySelector('.tab:nth-child(1)').classList.add('active');
+                document.getElementById('oldRegimeDeductions').classList.add('active');
+                document.getElementById('regime').value = 'old';
+            } else {
+                document.querySelector('.tab:nth-child(2)').classList.add('active');
+                document.getElementById('regime').value = 'new';
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('taxForm').reset();
+            document.getElementById('result').style.display = 'none';
+        }
+
+        document.getElementById('taxForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            calculateTax();
+        });
+
+        function calculateTax() {
+            const regime = document.getElementById('regime').value;
+            const ageGroup = document.getElementById('age').value;
+            const employmentType = document.getElementById('employmentType').value;
+            const grossIncome = parseFloat(document.getElementById('income').value) || 0;
+            const isSalaried = employmentType === 'salaried';
+
+            let deductions = 0;
+            let taxableIncome = grossIncome;
+            let exemptionLimit = 250000;
+
+            if (ageGroup === 'senior') {
+                exemptionLimit = 300000;
+            } else if (ageGroup === 'superSenior') {
+                exemptionLimit = 500000;
+            }
+
+            if (regime === 'old') {
+                const standardDeduction = document.getElementById('standardDeduction').checked ? 50000 : 0;
+                const section80C = Math.min(parseFloat(document.getElementById('section80C').value) || 0, 150000);
+                const section80D = parseFloat(document.getElementById('section80D').value) || 0;
+                const hra = parseFloat(document.getElementById('hra').value) || 0;
+                const otherDeductions = parseFloat(document.getElementById('otherDeductions').value) || 0;
+                
+                deductions = standardDeduction + section80C + section80D + hra + otherDeductions;
+                taxableIncome = Math.max(0, grossIncome - deductions);
+                
+                let remaining = taxableIncome - exemptionLimit;
+                let tax = 0;
+                
+                if (remaining > 0) {
+                    if (remaining <= 250000) {
+                        tax = remaining * 0.05;
+                    } else if (remaining <= 500000) {
+                        tax = 12500 + (remaining - 250000) * 0.2;
+                    } else {
+                        tax = 112500 + (remaining - 1000000) * 0.3;
+                    }
+                }
+                
+                // Add cess and display results
+                const cess = tax * 0.04;
+                const totalTax = tax + cess;
+                const monthlyTax = totalTax / 12;
+                const postTaxIncome = grossIncome - totalTax;
+
+                displayResults(grossIncome, deductions, taxableIncome, tax, cess, totalTax, monthlyTax, postTaxIncome);
+            } else {
+                // New regime calculation with hard-coded values
+                deductions = isSalaried ? 75000 : 0;
+                taxableIncome = Math.max(0, grossIncome - deductions);
+                
+                let tax = 0;
+                
+                if (taxableIncome <= 1275000) {
+                    tax = 0;
+                } else if (taxableIncome <= 1300000) {
+                    tax = 26000;
+                } else if (taxableIncome <= 1350000) {
+                    tax = 74100;
+                } else if (taxableIncome <= 1400000) {
+                    tax = 81900;
+                } else if (taxableIncome <= 1450000) {
+                    tax = 89700;
+                } else {
+                    // For incomes above ₹14.5L, use standard slab rates
+                    let remaining = taxableIncome - 1500000;
+                    if (remaining > 0) {
+                        tax = 89700 + (remaining * 0.3);
+                    }
+                }
+                
+                // Add cess and display results
+                const cess = tax * 0.04;
+                const totalTax = tax + cess;
+                const monthlyTax = totalTax / 12;
+                const postTaxIncome = grossIncome - totalTax;
+
+                displayResults(grossIncome, deductions, taxableIncome, tax, cess, totalTax, monthlyTax, postTaxIncome);
+            }
+        }
+
+        function displayResults(grossIncome, deductions, taxableIncome, tax, cess, totalTax, monthlyTax, postTaxIncome) {
+            document.getElementById('grossIncome').textContent = `₹${grossIncome.toLocaleString('en-IN')}`;
+            document.getElementById('totalDeductions').textContent = `₹${deductions.toLocaleString('en-IN')}`;
+            document.getElementById('taxableIncome').textContent = `₹${taxableIncome.toLocaleString('en-IN')}`;
+            document.getElementById('incomeTax').textContent = `₹${tax.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            document.getElementById('cess').textContent = `₹${cess.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            document.getElementById('totalTax').textContent = `₹${totalTax.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            document.getElementById('monthlyTax').textContent = `₹${monthlyTax.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            document.getElementById('postTaxIncome').textContent = `₹${postTaxIncome.toLocaleString('en-IN', {maximumFractionDigits: 2})}`;
+            
+            document.getElementById('result').style.display = 'block';
+        }
+
+        // Initialize the calculator
+        updateLanguage();
+    </script>
+</body>
+</html>

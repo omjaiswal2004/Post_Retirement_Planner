@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Financial Advice</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f4f6f9;
+    }
+    nav {
+      background-color: #2c3e50;
+      color: white;
+      padding: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .nav-links a {
+      color: white;
+      margin-left: 15px;
+      text-decoration: none;
+    }
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 30px;
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+    select, label {
+      font-size: 16px;
+      margin: 10px 0;
+      display: block;
+    }
+    .faq button {
+      width: 100%;
+      text-align: left;
+      padding: 12px;
+      margin: 10px 0;
+      background-color: #eee;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .faq button:hover {
+      background-color: #ddd;
+    }
+    .faq-content {
+      display: none;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-left: 4px solid #3498db;
+      margin-bottom: 10px;
+      animation: fadeIn 0.3s;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    section h3 {
+      margin-top: 30px;
+    }
+    ul {
+      padding-left: 20px;
+    }
+    ul li {
+      margin-bottom: 10px;
+    }
+    body.dark-mode {
+      background: #121212;
+      color: #e0e0e0;
+    }
+    body.dark-mode .container {
+      background: #1e1e1e;
+      color: #e0e0e0;
+    }
+    body.dark-mode .container p {
+      color: #ccc;
+    }
+    body.dark-mode nav {
+      background-color: #000000;
+    }
+    body.dark-mode .nav-links a {
+      color: #e0e0e0;
+    }
+    body.dark-mode .nav-links a:hover {
+      color: #00e5ff;
+    }
+    body.dark-mode .faq button {
+      background-color: #2d2d2d;
+      color: #e0e0e0;
+    }
+    body.dark-mode .faq button:hover {
+      background-color: #3d3d3d;
+    }
+    body.dark-mode .faq-content {
+      background-color: #252525;
+      border-left: 4px solid #00e5ff;
+    }
+    .language-toggle {
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1rem;
+      margin-left: 15px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .nav-controls {
+      display: flex;
+      align-items: center;
+    }
+    .profession-advice {
+      margin-top: 30px;
+      padding: 20px;
+      background-color: #f0f8ff;
+      border-radius: 8px;
+      border-left: 4px solid #4a6fa5;
+    }
+    body.dark-mode .profession-advice {
+      background-color: #1a2a3a;
+      border-left: 4px solid #4cc9f0;
+    }
+    .profession-faq {
+      margin-top: 20px;
+    }
+    .profession-faq h3 {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="logo">💼 Finance Tracker</div>
+    <div class="nav-links">
+      <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+      <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+      <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+      <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+      <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+      <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+      <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+      <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+      <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+      <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+      <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+      <a href="#" data-en="Logout" data-hi="लॉग आउट">Logout</a>
+    </div>
+    <div class="nav-controls">
+      <button id="themeToggle" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;">
+        <i class="fas fa-moon"></i>
+      </button>
+      <button id="languageToggle" class="language-toggle">
+        <i class="fas fa-language"></i>
+        <span data-en="Hindi" data-hi="English">Hindi</span>
+      </button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1 data-en="📊 Personalized Financial Advice" data-hi="📊 व्यक्तिगत वित्तीय सलाह">📊 Personalized Financial Advice</h1>
+
+    <label for="role" data-en="Select Your Role:" data-hi="अपनी भूमिका चुनें:">Select Your Role:</label>
+    <select id="role">
+      <option value="teacher" data-en="Teacher" data-hi="शिक्षक">Teacher</option>
+      <option value="doctor" data-en="Doctor" data-hi="डॉक्टर">Doctor</option>
+      <option value="govt" data-en="Government Employee" data-hi="सरकारी कर्मचारी">Government Employee</option>
+      <option value="private" data-en="Private Employee" data-hi="निजी कर्मचारी">Private Employee</option>
+      <option value="farmer" data-en="Farmer" data-hi="किसान">Farmer</option>
+      <option value="engineer" data-en="Engineer" data-hi="इंजीनियर">Engineer</option>
+      <option value="lawyer" data-en="Lawyer" data-hi="वकील">Lawyer</option>
+      <option value="salesperson" data-en="Salesperson" data-hi="विक्रेता">Salesperson</option>
+      <option value="business" data-en="Business Owner" data-hi="व्यवसाय स्वामी">Business Owner</option>
+    </select>
+
+    <div id="profession-specific" class="profession-advice">
+      <!-- Profession-specific advice will be inserted here dynamically -->
+    </div>
+
+    <div id="profession-faq" class="profession-faq">
+      <!-- Profession-specific FAQs will be inserted here dynamically -->
+    </div>
+
+    <section id="general-advice">
+      <h3 data-en="📌 General Financial Advice" data-hi="📌 सामान्य वित्तीय सलाह">📌 General Financial Advice</h3>
+      <ul>
+        <li data-en="💡 Follow the 50/30/20 Rule: 50% needs, 30% wants, 20% savings." data-hi="💡 50/30/20 नियम अपनाएं: 50% जरूरतें, 30% इच्छाएं, 20% बचत।">💡 Follow the 50/30/20 Rule: 50% needs, 30% wants, 20% savings.</li>
+        <li data-en="📈 Start investing early to take advantage of compound interest." data-hi="📈 चक्रवृद्धि ब्याज का लाभ उठाने के लिए जल्दी निवेश शुरू करें।">📈 Start investing early to take advantage of compound interest.</li>
+        <li data-en="💼 Always have 6 months of expenses in an emergency fund." data-hi="💼 आपातकालीन निधि में हमेशा 6 महीने के खर्चे रखें।">💼 Always have 6 months of expenses in an emergency fund.</li>
+        <li data-en="🔎 Review your credit score and financial plan every 6 months." data-hi="🔎 हर 6 महीने में अपने क्रेडिट स्कोर और वित्तीय योजना की समीक्षा करें।">🔎 Review your credit score and financial plan every 6 months.</li>
+        <li data-en="🚫 Avoid high-interest debt and pay off credit cards on time." data-hi="🚫 उच्च ब्याज वाले कर्ज से बचें और क्रेडिट कार्ड को समय पर चुकाएं।">🚫 Avoid high-interest debt and pay off credit cards on time.</li>
+        <li data-en="🌐 Diversify your investments—don't put all your money in one asset class." data-hi="🌐 अपने निवेशों में विविधता लाएं—सारा पैसा एक ही संपत्ति वर्ग में न लगाएं।">🌐 Diversify your investments—don't put all your money in one asset class.</li>
+      </ul>
+    </section>
+
+    <section id="investment-info">
+      <h3 data-en="💼 Investment & Gratuity Information" data-hi="💼 निवेश और ग्रेच्युटी जानकारी">💼 Investment & Gratuity Information</h3>
+      <ul>
+        <li data-en="📊 SIPs in mutual funds are ideal for long-term wealth generation." data-hi="📊 म्यूचुअल फंड में एसआईपी दीर्घकालिक धन उत्पादन के लिए आदर्श हैं।">📊 SIPs in mutual funds are ideal for long-term wealth generation.</li>
+        <li data-en="🏦 Fixed deposits and government bonds are great for stable, low-risk returns." data-hi="🏦 स्थिर, कम जोखिम वाले रिटर्न के लिए फिक्स्ड डिपॉजिट और सरकारी बॉन्ड बेहतरीन हैं।">🏦 Fixed deposits and government bonds are great for stable, low-risk returns.</li>
+        <li data-en="🏘️ Real estate can be a good investment but requires proper research and liquidity planning." data-hi="🏘️ रियल एस्टेट एक अच्छा निवेश हो सकता है लेकिन इसके लिए उचित शोध और तरलता योजना की आवश्यकता होती है।">🏘️ Real estate can be a good investment but requires proper research and liquidity planning.</li>
+        <li data-en="📚 Consider NPS and PPF for retirement and tax benefits." data-hi="📚 सेवानिवृत्ति और कर लाभ के लिए एनपीएस और पीपीएफ पर विचार करें।">📚 Consider NPS and PPF for retirement and tax benefits.</li>
+        <li data-en="⚖️ ULIPs can be considered for combined investment + insurance benefits (evaluate carefully)." data-hi="⚖️ संयुक्त निवेश + बीमा लाभ के लिए यूलिप पर विचार किया जा सकता है (सावधानी से मूल्यांकन करें)।">⚖️ ULIPs can be considered for combined investment + insurance benefits (evaluate carefully).</li>
+        <li data-en="🎯 Gratuity eligibility starts after 5 years of continuous service in an organization." data-hi="🎯 ग्रेच्युटी की पात्रता संगठन में 5 साल की निरंतर सेवा के बाद शुरू होती है।">🎯 Gratuity eligibility starts after 5 years of continuous service in an organization.</li>
+        <li data-en="🧮 Gratuity formula: (Last drawn salary × 15 × years of service) / 26." data-hi="🧮 ग्रेच्युटी फॉर्मूला: (अंतिम वेतन × 15 × सेवा के वर्ष) / 26।">🧮 Gratuity formula: (Last drawn salary × 15 × years of service) / 26.</li>
+      </ul>
+    </section>
+  </div>
+
+  <script>
+    // Define profession-specific advice and FAQs in both languages
+    const professionData = {
+      teacher: {
+        general: [
+          { en: "🍎 Maximize benefits from government pension schemes", hi: "🍎 सरकारी पेंशन योजनाओं से अधिकतम लाभ प्राप्त करें" },
+          { en: "📚 Utilize education-related tax exemptions (Section 80C for tuition fees)", hi: "📚 शिक्षा-संबंधित कर छूटों का उपयोग करें (ट्यूशन फीस के लिए धारा 80C)" },
+          { en: "👨‍👩‍👧‍👦 Consider education-linked insurance policies for children", hi: "👨‍👩‍👧‍👦 बच्चों के लिए शिक्षा-लिंक्ड बीमा पॉलिसियों पर विचार करें" },
+          { en: "☀️ Plan finances around academic year cycles (summer break savings)", hi: "☀️ शैक्षणिक वर्ष चक्र के आसपास वित्त की योजना बनाएं (गर्मी की छुट्टियों की बचत)" }
+        ],
+        investment: [
+          { en: "💰 PPF (Public Provident Fund) - Safe, tax-free returns", hi: "💰 पीपीएफ (पब्लिक प्रोविडेंट फंड) - सुरक्षित, कर-मुक्त रिटर्न" },
+          { en: "🏦 NPS (National Pension System) - Additional ₹50,000 tax benefit under 80CCD(1B)", hi: "🏦 एनपीएस (राष्ट्रीय पेंशन प्रणाली) - 80CCD(1B) के तहत अतिरिक्त ₹50,000 कर लाभ" },
+          { en: "📈 SIPs in balanced mutual funds (₹5,000-10,000/month)", hi: "📈 संतुलित म्यूचुअल फंड में एसआईपी (₹5,000-10,000/माह)" },
+          { en: "🎓 Gratuity: (Last salary × 15 × years of service)/26 (after 5 years)", hi: "🎓 ग्रेच्युटी: (अंतिम वेतन × 15 × सेवा के वर्ष)/26 (5 वर्ष के बाद)" }
+        ],
+        faqs: [
+          { 
+            question: { en: "What are the best tax-saving options for teachers?", hi: "शिक्षकों के लिए सर्वोत्तम कर-बचत विकल्प क्या हैं?" },
+            answer: { en: "Teachers can benefit from Section 80C deductions (up to ₹1.5 lakh) through investments in PPF, ELSS, NSC, and tuition fee payments. Additionally, they can claim deductions under Section 80D for health insurance premiums.", hi: "शिक्षक पीपीएफ, ईएलएसएस, एनएससी में निवेश और ट्यूशन फीस भुगतान के माध्यम से धारा 80सी कटौती (₹1.5 लाख तक) का लाभ उठा सकते हैं। इसके अतिरिक्त, वे स्वास्थ्य बीमा प्रीमियम के लिए धारा 80डी के तहत कटौती का दावा कर सकते हैं।" }
+          },
+          { 
+            question: { en: "How can teachers plan for retirement?", hi: "शिक्षक सेवानिवृत्ति की योजना कैसे बना सकते हैं?" },
+            answer: { en: "Teachers should contribute to NPS for additional tax benefits and pension income. They can also invest in PPF and SIPs in balanced mutual funds. Government teachers should track their GPF contributions and pension benefits.", hi: "शिक्षकों को अतिरिक्त कर लाभ और पेंशन आय के लिए एनपीएस में योगदान देना चाहिए। वे पीपीएफ और संतुलित म्यूचुअल फंड में एसआईपी में भी निवेश कर सकते हैं। सरकारी शिक्षकों को अपने जीपीएफ योगदान और पेंशन लाभों को ट्रैक करना चाहिए।" }
+          }
+        ]
+      },
+      doctor: {
+        general: [
+          { en: "🏥 Maintain separate accounts for clinic/hospital and personal finances", hi: "🏥 क्लिनिक/अस्पताल और व्यक्तिगत वित्त के लिए अलग-अलग खाते रखें" },
+          { en: "🩺 Invest in malpractice insurance and health coverage", hi: "🩺 मालप्रैक्टिस बीमा और स्वास्थ्य कवरेज में निवेश करें" },
+          { en: "💊 Create emergency fund (6-12 months of expenses)", hi: "💊 आपातकालीन निधि बनाएं (6-12 महीने के खर्चे)" },
+          { en: "🔄 Consider health-tech startups for angel investing opportunities", hi: "🔄 एंजेल निवेश के अवसरों के लिए हेल्थ-टेक स्टार्टअप्स पर विचार करें" }
+        ],
+        investment: [
+          { en: "💉 Equity-linked savings schemes (ELSS) for tax saving", hi: "💉 कर बचत के लिए इक्विटी-लिंक्ड सेविंग स्कीम (ELSS)" },
+          { en: "🏢 Commercial real estate for clinic expansion", hi: "🏢 क्लिनिक विस्तार के लिए वाणिज्यिक रियल एस्टेट" },
+          { en: "📊 Sector-specific mutual funds (healthcare/pharma)", hi: "📊 सेक्टर-विशिष्ट म्यूचुअल फंड (हेल्थकेयर/फार्मा)" },
+          { en: "🩺 Gratuity: Typically not applicable unless employed by hospital", hi: "🩺 ग्रेच्युटी: आमतौर पर लागू नहीं होती जब तक कि अस्पताल द्वारा नियोजित न हों" }
+        ],
+        faqs: [
+          { 
+            question: { en: "What insurance policies are essential for doctors?", hi: "डॉक्टरों के लिए कौन सी बीमा पॉलिसियाँ आवश्यक हैं?" },
+            answer: { en: "Doctors must have professional indemnity insurance, health insurance with high coverage, and disability insurance. Term life insurance is also recommended for financial security of dependents.", hi: "डॉक्टरों के पास पेशेवर क्षतिपूर्ति बीमा, उच्च कवरेज वाला स्वास्थ्य बीमा और विकलांगता बीमा होना चाहिए। आश्रितों की वित्तीय सुरक्षा के लिए टर्म लाइफ इंश्योरेंस की भी सिफारिश की जाती है।" }
+          },
+          { 
+            question: { en: "How should doctors manage irregular income?", hi: "डॉक्टरों को अनियमित आय का प्रबंधन कैसे करना चाहिए?" },
+            answer: { en: "Doctors with irregular income should maintain a larger emergency fund (9-12 months expenses), invest surplus income in liquid funds, and follow a strict budgeting system. They should also consider setting up automatic transfers to savings/investment accounts during high-income months.", hi: "अनियमित आय वाले डॉक्टरों को एक बड़ी आपातकालीन निधि (9-12 महीने के खर्चे) बनाए रखनी चाहिए, अधिशेष आय को लिक्विड फंड में निवेश करना चाहिए, और एक सख्त बजट प्रणाली का पालन करना चाहिए। उन्हें उच्च आय वाले महीनों के दौरान बचत/निवेश खातों में स्वचालित हस्तांतरण स्थापित करने पर भी विचार करना चाहिए।" }
+          }
+        ]
+      },
+      govt: {
+        general: [
+          { en: "🏛️ Maximize benefits from government pension schemes", hi: "🏛️ सरकारी पेंशन योजनाओं से अधिकतम लाभ प्राप्त करें" },
+          { en: "📝 Track your GPF (General Provident Fund) contributions", hi: "📝 अपने जीपीएफ (जनरल प्रोविडेंट फंड) योगदान को ट्रैक करें" },
+          { en: "🔄 Take advantage of government employee loan schemes", hi: "🔄 सरकारी कर्मचारी ऋण योजनाओं का लाभ उठाएं" },
+          { en: "📅 Plan for post-retirement medical benefits", hi: "📅 सेवानिवृत्ति के बाद के चिकित्सा लाभों की योजना बनाएं" }
+        ],
+        investment: [
+          { en: "💰 PPF - Ideal for risk-averse government employees", hi: "💰 पीपीएफ - जोखिम से बचने वाले सरकारी कर्मचारियों के लिए आदर्श" },
+          { en: "🏦 NPS - Additional tax benefits for government employees", hi: "🏦 एनपीएस - सरकारी कर्मचारियों के लिए अतिरिक्त कर लाभ" },
+          { en: "📈 Government bonds and securities", hi: "📈 सरकारी बॉन्ड और प्रतिभूतियां" },
+          { en: "🎖️ Gratuity: Fully tax-exempt for government employees", hi: "🎖️ ग्रेच्युटी: सरकारी कर्मचारियों के लिए पूरी तरह से कर-मुक्त" }
+        ],
+        faqs: [
+          { 
+            question: { en: "What are the retirement benefits for government employees?", hi: "सरकारी कर्मचारियों के लिए सेवानिवृत्ति लाभ क्या हैं?" },
+            answer: { en: "Government employees receive pension (50% of last drawn salary), GPF withdrawal, gratuity (tax-free), and post-retirement medical benefits. They should also consider additional NPS contributions for higher pension income.", hi: "सरकारी कर्मचारियों को पेंशन (अंतिम वेतन का 50%), जीपीएफ निकासी, ग्रेच्युटी (कर-मुक्त), और सेवानिवृत्ति के बाद के चिकित्सा लाभ प्राप्त होते हैं। उन्हें उच्च पेंशन आय के लिए अतिरिक्त एनपीएस योगदान पर भी विचार करना चाहिए।" }
+          },
+          { 
+            question: { en: "How can government employees maximize tax savings?", hi: "सरकारी कर्मचारी कर बचत को कैसे अधिकतम कर सकते हैं?" },
+            answer: { en: "Govt employees can claim HRA (if living in rented accommodation), standard deduction of ₹50,000, NPS contributions (additional ₹50,000 under 80CCD(1B)), professional tax, and deductions under Section 80C (up to ₹1.5 lakh) through PPF, life insurance premiums, etc.", hi: "सरकारी कर्मचारी एचआरए (यदि किराए के आवास में रहते हैं), ₹50,000 की मानक कटौती, एनपीएस योगदान (80सीसीडी(1बी) के तहत अतिरिक्त ₹50,000), पेशेवर कर, और पीपीएफ, जीवन बीमा प्रीमियम आदि के माध्यम से धारा 80सी (₹1.5 लाख तक) के तहत कटौती का दावा कर सकते हैं।" }
+          }
+        ]
+      },
+      private: {
+        general: [
+          { en: "🏢 Maximize employer-matched retirement contributions", hi: "🏢 नियोक्ता-मिलान सेवानिवृत्ति योगदान को अधिकतम करें" },
+          { en: "📊 Understand your ESOPs (Employee Stock Options)", hi: "📊 अपने ईएसओपी (कर्मचारी स्टॉक विकल्प) को समझें" },
+          { en: "🔄 Job change planning: Keep 3-6 months expenses liquid", hi: "🔄 नौकरी बदलने की योजना: 3-6 महीने के खर्चे तरल रखें" },
+          { en: "📝 Maintain detailed records for tax deductions", hi: "📝 कर कटौती के लिए विस्तृत रिकॉर्ड रखें" }
+        ],
+        investment: [
+          { en: "💼 ELSS funds for tax saving under 80C", hi: "💼 80C के तहत कर बचत के लिए ELSS फंड" },
+          { en: "📈 Aggressive SIPs in equity funds (for younger employees)", hi: "📈 इक्विटी फंड में आक्रामक एसआईपी (युवा कर्मचारियों के लिए)" },
+          { en: "🏠 Home loan for tax benefits (Section 24 and 80C)", hi: "🏠 कर लाभ के लिए होम लोन (धारा 24 और 80C)" },
+          { en: "💼 Gratuity: Tax-exempt up to ₹20 lakh", hi: "💼 ग्रेच्युटी: ₹20 लाख तक कर-मुक्त" }
+        ],
+        faqs: [
+          { 
+            question: { en: "What should private employees know about PF withdrawal?", hi: "निजी कर्मचारियों को पीएफ निकासी के बारे में क्या पता होना चाहिए?" },
+            answer: { en: "EPF withdrawal before 5 years of continuous service is taxable. After 5 years, it's tax-free. For job changes, transfer rather than withdraw your PF to maintain continuity. Partial withdrawals are allowed for specific purposes like home purchase, medical emergencies, etc.", hi: "5 साल की निरंतर सेवा से पहले ईपीएफ निकासी कर योग्य है। 5 साल के बाद, यह कर-मुक्त है। नौकरी बदलने के लिए, निरंतरता बनाए रखने के लिए अपने पीएफ को निकालने के बजाय स्थानांतरित करें। घर खरीदने, चिकित्सा आपात स्थितियों आदि जैसे विशिष्ट उद्देश्यों के लिए आंशिक निकासी की अनुमति है।" }
+          },
+          { 
+            question: { en: "How can private employees plan for career breaks?", hi: "निजी कर्मचारी करियर ब्रेक की योजना कैसे बना सकते हैं?" },
+            answer: { en: "Maintain an emergency fund covering 9-12 months expenses. Keep skills updated through online courses. Consider freelance/consulting opportunities during breaks. Maintain health insurance coverage continuously. Plan for SIPs that can be paused if needed.", hi: "9-12 महीने के खर्चों को कवर करने वाली आपातकालीन निधि बनाए रखें। ऑनलाइन पाठ्यक्रमों के माध्यम से कौशल को अद्यतन रखें। ब्रेक के दौरान फ्रीलांस/परामर्श के अवसरों पर विचार करें। स्वास्थ्य बीमा कवरेज को लगातार बनाए रखें। एसआईपी की योजना बनाएं जिन्हें आवश्यकता पड़ने पर रोका जा सकता है।" }
+          }
+        ]
+      },
+      farmer: {
+        general: [
+          { en: "🌾 Utilize government schemes (PM Kisan, crop insurance)", hi: "🌾 सरकारी योजनाओं का उपयोग करें (पीएम किसान, फसल बीमा)" },
+          { en: "🚜 Plan finances according to crop cycles", hi: "🚜 फसल चक्र के अनुसार वित्त की योजना बनाएं" },
+          { en: "💧 Invest in water-saving irrigation technologies", hi: "💧 पानी बचाने वाली सिंचाई तकनीकों में निवेश करें" },
+          { en: "🌦️ Create emergency fund for unpredictable weather", hi: "🌦️ अप्रत्याशित मौसम के लिए आपातकालीन निधि बनाएं" }
+        ],
+        investment: [
+          { en: "🌱 Kisan Vikas Patra (KVP) for medium-term savings", hi: "🌱 मध्यम अवधि की बचत के लिए किसान विकास पत्र (KVP)" },
+          { en: "🏦 Post Office Savings Schemes", hi: "🏦 डाकघर बचत योजनाएं" },
+          { en: "🚜 Agricultural land as long-term asset", hi: "🚜 दीर्घकालिक संपत्ति के रूप में कृषि भूमि" },
+          { en: "🌾 Gratuity: Not typically applicable", hi: "🌾 ग्रेच्युटी: आमतौर पर लागू नहीं होती" }
+        ],
+        faqs: [
+          { 
+            question: { en: "What government schemes benefit farmers financially?", hi: "कौन सी सरकारी योजनाएं किसानों को वित्तीय रूप से लाभान्वित करती हैं?" },
+            answer: { en: "Key schemes include PM Kisan Samman Nidhi (₹6,000/year), crop insurance (PMFBY), interest subvention on loans, and soil health cards. Farmers should also explore state-specific schemes for subsidies on seeds, fertilizers, and equipment.", hi: "प्रमुख योजनाओं में पीएम किसान सम्मान निधि (₹6,000/वर्ष), फसल बीमा (पीएमएफबीवाई), ऋण पर ब्याज अनुदान और मृदा स्वास्थ्य कार्ड शामिल हैं। किसानों को बीज, उर्वरक और उपकरण पर सब्सिडी के लिए राज्य-विशिष्ट योजनाओं का भी पता लगाना चाहिए।" }
+          },
+          { 
+            question: { en: "How can farmers manage seasonal income fluctuations?", hi: "किसान मौसमी आय उतार-चढ़ाव का प्रबंधन कैसे कर सकते हैं?" },
+            answer: { en: "Create separate accounts for business and personal expenses. Save during harvest months to cover lean periods. Consider diversifying crops or adding livestock for more stable income. Explore post-harvest processing to add value. Maintain good records for loan eligibility.", hi: "व्यवसाय और व्यक्तिगत खर्चों के लिए अलग-अलग खाते बनाएं। कम आय वाले समय को कवर करने के लिए फसल के महीनों के दौरान बचत करें। अधिक स्थिर आय के लिए फसलों में विविधता लाने या पशुधन जोड़ने पर विचार करें। मूल्य जोड़ने के लिए फसल के बाद की प्रसंस्करण का पता लगाएं। ऋण पात्रता के लिए अच्छे रिकॉर्ड बनाए रखें।" }
+          }
+        ]
+      },
+      engineer: {
+        general: [
+          { en: "🖥️ Consider tech startup investments if financially capable", hi: "🖥️ यदि वित्तीय रूप से सक्षम हों तो टेक स्टार्टअप निवेश पर विचार करें" },
+          { en: "📊 Track variable income from bonuses and incentives", hi: "📊 बोनस और प्रोत्साहन से परिवर्तनीय आय को ट्रैक करें" },
+          { en: "🌐 International job opportunities: Plan forex investments", hi: "🌐 अंतरराष्ट्रीय नौकरी के अवसर: विदेशी मुद्रा निवेश की योजना बनाएं" },
+          { en: "📱 Stay updated on tech trends affecting your industry", hi: "📱 अपने उद्योग को प्रभावित करने वाली तकनीकी रुझानों पर अद्यतन रहें" }
+        ],
+        investment: [
+          { en: "💻 Sector-specific funds (technology/innovation)", hi: "💻 सेक्टर-विशिष्ट फंड (प्रौद्योगिकी/नवाचार)" },
+          { en: "📈 High-risk equity investments (for younger engineers)", hi: "📈 उच्च जोखिम वाले इक्विटी निवेश (युवा इंजीनियरों के लिए)" },
+          { en: "🏠 REITs for real estate exposure without direct ownership", hi: "🏠 प्रत्यक्ष स्वामित्व के बिना रियल एस्टेट एक्सपोजर के लिए REITs" },
+          { en: "⚙️ Gratuity: Standard calculation after 5 years service", hi: "⚙️ ग्रेच्युटी: 5 वर्ष की सेवा के बाद मानक गणना" }
+        ],
+        faqs: [
+          { 
+            question: { en: "How should engineers invest their bonuses?", hi: "इंजीनियरों को अपने बोनस का निवेश कैसे करना चाहिए?" },
+            answer: { en: "Allocate bonuses using the 50-30-20 rule: 50% for financial goals (debt repayment, investments), 30% for lifestyle upgrades, and 20% for emergency fund. Consider SIPs in equity funds for long-term growth and PPF for tax-free returns.", hi: "50-30-20 नियम का उपयोग करके बोनस आवंटित करें: 50% वित्तीय लक्ष्यों (ऋण चुकौती, निवेश) के लिए, 30% जीवनशैली उन्नयन के लिए, और 20% आपातकालीन निधि के लिए। दीर्घकालिक विकास के लिए इक्विटी फंड में एसआईपी और कर-मुक्त रिटर्न के लिए पीपीएफ पर विचार करें।" }
+          },
+          { 
+            question: { en: "What are the best investment options for engineers working abroad?", hi: "विदेश में काम करने वाले इंजीनियरों के लिए सर्वोत्तम निवेश विकल्प क्या हैं?" },
+            answer: { en: "Engineers abroad should maintain NRE/NRO accounts, invest in international index funds (like S&P 500), consider Indian mutual funds through PIS, and explore real estate in both countries. They should also maximize retirement account contributions in their host country.", hi: "विदेश में इंजीनियरों को एनआरई/एनआरओ खाते बनाए रखने चाहिए, अंतरराष्ट्रीय इंडेक्स फंड (जैसे एसएंडपी 500) में निवेश करना चाहिए, पीआईएस के माध्यम से भारतीय म्यूचुअल फंड पर विचार करना चाहिए, और दोनों देशों में रियल एस्टेट का पता लगाना चाहिए। उन्हें अपने मेजबान देश में सेवानिवृत्ति खाते के योगदान को भी अधिकतम करना चाहिए।" }
+          }
+        ]
+      },
+      lawyer: {
+        general: [
+          { en: "⚖️ Maintain separate accounts for practice and personal finances", hi: "⚖️ अभ्यास और व्यक्तिगत वित्त के लिए अलग-अलग खाते रखें" },
+          { en: "📝 Invest in professional liability insurance", hi: "📝 पेशेवर देयता बीमा में निवेश करें" },
+          { en: "🏛️ Plan for irregular income from cases", hi: "🏛️ मामलों से अनियमित आय की योजना बनाएं" },
+          { en: "📚 Continuing education: Budget for specialization courses", hi: "📚 निरंतर शिक्षा: विशेषज्ञता पाठ्यक्रमों के लिए बजट" }
+        ],
+        investment: [
+          { en: "🏢 Commercial property for office space", hi: "🏢 कार्यालय स्थान के लिए वाणिज्यिक संपत्ति" },
+          { en: "📈 Equity investments in legal-tech startups", hi: "📈 लीगल-टेक स्टार्टअप में इक्विटी निवेश" },
+          { en: "💼 Tax-saving through legal consultancy expenses", hi: "💼 कानूनी परामर्श व्यय के माध्यम से कर बचत" },
+          { en: "⚖️ Gratuity: Not typically applicable for private practitioners", hi: "⚖️ ग्रेच्युटी: निजी व्यवसायियों के लिए आमतौर पर लागू नहीं होती" }
+        ],
+        faqs: [
+          { 
+            question: { en: "How can lawyers maximize tax deductions?", hi: "वकील कर कटौती को कैसे अधिकतम कर सकते हैं?" },
+            answer: { en: "Lawyers can deduct office rent, staff salaries, legal books/subscriptions, professional association fees, conference expenses, and travel costs. Maintain meticulous records and consider forming an LLP for additional tax benefits.", hi: "वकील कार्यालय का किराया, स्टाफ वेतन, कानूनी पुस्तकें/सदस्यता, पेशेवर संघ शुल्क, सम्मेलन व्यय और यात्रा लागत को काट सकते हैं। सावधानीपूर्वक रिकॉर्ड रखें और अतिरिक्त कर लाभों के लिए एलएलपी बनाने पर विचार करें।" }
+          },
+          { 
+            question: { en: "What retirement plans are best for lawyers?", hi: "वकीलों के लिए सर्वोत्तम सेवानिवृत्ति योजनाएं कौन सी हैं?" },
+            answer: { en: "Private practitioners should invest in NPS (for tax benefits), PPF (for safety), and commercial real estate (for rental income). Those in firms should maximize employer retirement contributions. All lawyers should maintain disability insurance given the profession's demands.", hi: "निजी व्यवसायियों को एनपीएस (कर लाभों के लिए), पीपीएफ (सुरक्षा के लिए), और वाणिज्यिक रियल एस्टेट (किराये की आय के लिए) में निवेश करना चाहिए। फर्मों में काम करने वालों को नियोक्ता सेवानिवृत्ति योगदान को अधिकतम करना चाहिए। सभी वकीलों को पेशे की मांगों को देखते हुए विकलांगता बीमा बनाए रखना चाहिए।" }
+          }
+        ]
+      },
+      salesperson: {
+        general: [
+          { en: "📊 Budget carefully for months with lower commissions", hi: "📊 कम कमीशन वाले महीनों के लिए सावधानी से बजट बनाएं" },
+          { en: "🚗 Track and claim all work-related travel expenses", hi: "🚗 सभी कार्य-संबंधित यात्रा व्ययों को ट्रैक करें और दावा करें" },
+          { en: "📱 Invest in productivity tools to maximize sales", hi: "📱 बिक्री को अधिकतम करने के लिए उत्पादकता उपकरणों में निवेश करें" },
+          { en: "💼 Network strategically for better opportunities", hi: "💼 बेहतर अवसरों के लिए रणनीतिक रूप से नेटवर्क बनाएं" }
+        ],
+        investment: [
+          { en: "💰 Liquid funds for emergency access to cash", hi: "💰 नकदी तक आपातकालीन पहुंच के लिए लिक्विड फंड" },
+          { en: "📈 SIPs to automate savings from variable income", hi: "📈 परिवर्तनीय आय से बचत को स्वचालित करने के लिए एसआईपी" },
+          { en: "🏠 Consider rent vs buy analysis for housing", hi: "🏠 आवास के लिए किराए बनाम खरीद विश्लेषण पर विचार करें" },
+          { en: "📊 Gratuity: Depends on employment terms (usually after 5 years)", hi: "📊 ग्रेच्युटी: रोजगार की शर्तों पर निर्भर करती है (आमतौर पर 5 वर्ष के बाद)" }
+        ],
+        faqs: [
+          { 
+            question: { en: "How can sales professionals manage variable income?", hi: "बिक्री पेशेवर परिवर्तनीय आय का प्रबंधन कैसे कर सकते हैं?" },
+            answer: { en: "Create a baseline budget covering essential expenses. Save windfalls (bonuses, high-commission months) in separate accounts. Build a 6-9 month emergency fund. Automate savings through SIPs. Consider term insurance instead of traditional policies for better coverage at lower cost.", hi: "आवश्यक खर्चों को कवर करने वाला एक आधारभूत बजट बनाएं। अप्रत्याशित आय (बोनस, उच्च कमीशन वाले महीने) को अलग-अलग खातों में बचाएं। 6-9 महीने की आपातकालीन निधि बनाएं। एसआईपी के माध्यम से बचत को स्वचालित करें। कम लागत पर बेहतर कवरेज के लिए पारंपरिक पॉलिसियों के बजाय टर्म इंश्योरेंस पर विचार करें।" }
+          },
+          { 
+            question: { en: "What are the best investment options for traveling salespeople?", hi: "यात्रा करने वाले सेल्सपर्सन के लिए सर्वोत्तम निवेश विकल्प क्या हैं?" },
+            answer: { en: "Opt for mobile-friendly investments like mutual fund apps, digital gold, and online fixed deposits. Consider travel-friendly insurance policies with nationwide coverage. Invest in portable assets rather than physical ones. Maintain a separate travel expense account to track reimbursements.", hi: "म्यूचुअल फंड ऐप, डिजिटल गोल्ड और ऑनलाइन फिक्स्ड डिपॉजिट जैसे मोबाइल-अनुकूल निवेश चुनें। देशव्यापी कवरेज वाली यात्रा-अनुकूल बीमा पॉलिसियों पर विचार करें। भौतिक संपत्तियों के बजाय पोर्टेबल संपत्तियों में निवेश करें। प्रतिपूर्ति को ट्रैक करने के लिए एक अलग यात्रा व्यय खाता बनाए रखें।" }
+          }
+        ]
+      },
+      business: {
+        general: [
+          { en: "🏢 Maintain strict separation between business and personal finances", hi: "🏢 व्यवसाय और व्यक्तिगत वित्त के बीच सख्त अलगाव बनाए रखें" },
+          { en: "📊 Reinvest profits wisely for business growth", hi: "📊 व्यवसाय विकास के लिए मुनाफे को समझदारी से पुनर्निवेश करें" },
+          { en: "🔄 Create multiple income streams within business", hi: "🔄 व्यवसाय के भीतर कई आय स्रोत बनाएं" },
+          { en: "📝 Maintain impeccable financial records for tax purposes", hi: "📝 कर उद्देश्यों के लिए निर्दोष वित्तीय रिकॉर्ड रखें" }
+        ],
+        investment: [
+          { en: "📈 Business expansion as primary investment", hi: "📈 प्राथमिक निवेश के रूप में व्यवसाय विस्तार" },
+          { en: "🏢 Commercial real estate for business premises", hi: "🏢 व्यवसाय परिसर के लिए वाणिज्यिक रियल एस्टेट" },
+          { en: "💰 Diversify into mutual funds/stocks outside business", hi: "💰 व्यवसाय से बाहर म्यूचुअल फंड/स्टॉक में विविधता लाएं" },
+          { en: "🏛️ Gratuity: For employees, tax-deductible business expense", hi: "🏛️ ग्रेच्युटी: कर्मचारियों के लिए, कर-कटौती योग्य व्यवसाय व्यय" }
+        ],
+        faqs: [
+          { 
+            question: { en: "How should business owners structure their salary and dividends?", hi: "व्यवसाय मालिकों को अपने वेतन और लाभांश को कैसे संरचित करना चाहिए?" },
+            answer: { en: "Take a reasonable salary to maximize retirement contributions and avoid IRS scrutiny. Balance with dividends to optimize tax efficiency. Consult a CA for the ideal salary-dividend mix based on your business structure and personal tax bracket.", hi: "सेवानिवृत्ति योगदान को अधिकतम करने और आईआरएस की जांच से बचने के लिए एक उचित वेतन लें। कर दक्षता को अनुकूलित करने के लिए लाभांश के साथ संतुलन बनाएं। अपने व्यवसाय संरचना और व्यक्तिगत कर ब्रैकेट के आधार पर आदर्श वेतन-लाभांश मिश्रण के लिए एक सीए से परामर्श करें।" }
+          },
+          { 
+            question: { en: "What are the best retirement plans for business owners?", hi: "व्यवसाय मालिकों के लिए सर्वोत्तम सेवानिवृत्ति योजनाएं कौन सी हैं?" },
+            answer: { en: "Sole proprietors should consider SEP IRA or Solo 401(k) for high contribution limits. Partnership/LLP can establish NPS corporate schemes. All should maintain personal PPF and NPS accounts. Diversify with commercial real estate and equity investments outside the business.", hi: "एकमात्र स्वामित्व वालों को उच्च योगदान सीमा के लिए SEP IRA या सोलो 401(k) पर विचार करना चाहिए। साझेदारी/एलएलपी एनपीएस कॉर्पोरेट योजनाएं स्थापित कर सकती है। सभी को व्यक्तिगत पीपीएफ और एनपीएस खाते बनाए रखने चाहिए। व्यवसाय से बाहर वाणिज्यिक रियल एस्टेट और इक्विटी निवेश के साथ विविधता लाएं।" }
+          }
+        ]
+      }
+    };
+
+    // Current language state
+    let currentLanguage = 'en';
+
+    // Function to toggle language
+    function toggleLanguage() {
+      currentLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+      updateLanguage();
+      updateLanguageToggleButton();
+    }
+
+    // Function to update all language-specific elements
+    function updateLanguage() {
+      // Update all elements with data-en and data-hi attributes
+      document.querySelectorAll('[data-en], [data-hi]').forEach(element => {
+        element.textContent = element.getAttribute(`data-${currentLanguage}`);
+      });
+
+      // Update select options
+      document.querySelectorAll('#role option').forEach(option => {
+        option.textContent = option.getAttribute(`data-${currentLanguage}`);
+      });
+
+      // Update dynamic content (FAQs, advice)
+      updateAdviceSection(document.getElementById('role').value);
+    }
+
+    // Function to update the language toggle button text
+    function updateLanguageToggleButton() {
+      const button = document.getElementById('languageToggle');
+      const span = button.querySelector('span');
+      span.textContent = span.getAttribute(`data-${currentLanguage}`);
+    }
+
+    // Function to update profession-specific advice and FAQs
+    function updateProfessionAdvice(role) {
+      const adviceSection = document.getElementById("profession-specific");
+      const faqSection = document.getElementById("profession-faq");
+      adviceSection.innerHTML = '';
+      faqSection.innerHTML = '';
+
+      if (professionData[role]) {
+        // Create general advice section
+        const generalDiv = document.createElement("div");
+        generalDiv.innerHTML = `<h3 data-en="💼 ${role.charAt(0).toUpperCase() + role.slice(1)}-Specific Advice" 
+                                data-hi="💼 ${role === 'teacher' ? 'शिक्षक' : role === 'doctor' ? 'डॉक्टर' : role === 'govt' ? 'सरकारी कर्मचारी' : role === 'private' ? 'निजी कर्मचारी' : role === 'farmer' ? 'किसान' : role === 'engineer' ? 'इंजीनियर' : role === 'lawyer' ? 'वकील' : role === 'salesperson' ? 'विक्रेता' : 'व्यवसाय स्वामी'}-विशिष्ट सलाह">
+                                ${role.charAt(0).toUpperCase() + role.slice(1)}-Specific Advice</h3>
+                                <ul id="profession-general-advice"></ul>`;
+        adviceSection.appendChild(generalDiv);
+
+        // Create investment advice section
+        const investmentDiv = document.createElement("div");
+        investmentDiv.innerHTML = `<h3 data-en="💰 ${role.charAt(0).toUpperCase() + role.slice(1)} Investment & Gratuity" 
+                                      data-hi="💰 ${role === 'teacher' ? 'शिक्षक' : role === 'doctor' ? 'डॉक्टर' : role === 'govt' ? 'सरकारी कर्मचारी' : role === 'private' ? 'निजी कर्मचारी' : role === 'farmer' ? 'किसान' : role === 'engineer' ? 'इंजीनियर' : role === 'lawyer' ? 'वकील' : role === 'salesperson' ? 'विक्रेता' : 'व्यवसाय स्वामी'} निवेश और ग्रेच्युटी">
+                                      ${role.charAt(0).toUpperCase() + role.slice(1)} Investment & Gratuity</h3>
+                                      <ul id="profession-investment-advice"></ul>`;
+        adviceSection.appendChild(investmentDiv);
+
+        // Create FAQs section if they exist
+        if (professionData[role].faqs && professionData[role].faqs.length > 0) {
+          const faqHeader = document.createElement("h3");
+          faqHeader.textContent = currentLanguage === 'en' ? "❓ Frequently Asked Questions" : "❓ अक्सर पूछे जाने वाले प्रश्न";
+          faqHeader.style.marginTop = "20px";
+          faqSection.appendChild(faqHeader);
+
+          professionData[role].faqs.forEach(faq => {
+            const faqButton = document.createElement("button");
+            faqButton.textContent = faq.question[currentLanguage];
+            const faqContent = document.createElement("div");
+            faqContent.classList.add("faq-content");
+            faqContent.textContent = faq.answer[currentLanguage];
+
+            faqButton.addEventListener("click", function() {
+              const isExpanded = faqContent.style.display === "block";
+              faqContent.style.display = isExpanded ? "none" : "block";
+              this.setAttribute('aria-expanded', !isExpanded);
+            });
+
+            faqSection.appendChild(faqButton);
+            faqSection.appendChild(faqContent);
+          });
+        }
+
+        // Update language for the new elements
+        updateLanguage();
+
+        // Populate General Advice
+        const generalList = document.getElementById("profession-general-advice");
+        professionData[role].general.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item[currentLanguage];
+          generalList.appendChild(li);
+        });
+
+        // Populate Investment Advice
+        const investmentList = document.getElementById("profession-investment-advice");
+        professionData[role].investment.forEach(item => {
+          const li = document.createElement("li");
+          li.textContent = item[currentLanguage];
+          investmentList.appendChild(li);
+        });
+      }
+    }
+
+    // Event listener for role change
+    function updateAdviceSection(role) {
+      updateProfessionAdvice(role);
+      
+      // Update General Advice (common for all)
+      document.querySelectorAll('#general-advice li').forEach(li => {
+        li.textContent = li.getAttribute(`data-${currentLanguage}`);
+      });
+
+      // Update Investment Info (common for all)
+      document.querySelectorAll('#investment-info li').forEach(li => {
+        li.textContent = li.getAttribute(`data-${currentLanguage}`);
+      });
+    }
+
+    // Event listeners
+    document.getElementById("role").addEventListener("change", function () {
+      updateAdviceSection(this.value);
+    });
+
+    document.getElementById("languageToggle").addEventListener("click", toggleLanguage);
+
+    // Dark mode toggle
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleBtn = document.getElementById('themeToggle');
+      const icon = toggleBtn.querySelector('i');
+
+      toggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+        if (document.body.classList.contains('dark-mode')) {
+          icon.classList.remove('fa-moon');
+          icon.classList.add('fa-sun');
+        } else {
+          icon.classList.remove('fa-sun');
+          icon.classList.add('fa-moon');
+        }
+      });
+
+      // Trigger change on page load to show initial data
+      document.getElementById("role").dispatchEvent(new Event('change'));
+    });
+  </script>
+</body>
+</html>

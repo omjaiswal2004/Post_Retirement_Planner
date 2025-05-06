@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Insurance Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f4f7f9;
+      color: #333;
+    }
+
+    /* Top Navbar */
+    .nav-bar {
+      background-color: #1a2e3f;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links a {
+      color: white;
+      margin-left: 2rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+      color: #ffcc00;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+
+    .section {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    .section h3 {
+      margin-bottom: 1rem;
+    }
+
+    input, select {
+      padding: 0.5rem;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 0.5rem 1rem;
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #1558b0;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #1a2e3f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #1a2e3f;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      input, select, button {
+        width: 100%;
+        margin-right: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Nav -->
+  <div class="nav-bar">
+    <h2 style="color: white; margin: 0;"><i class="fas fa-shield-alt"></i> Insurance Tracker</h2>
+    <div class="nav-links">
+      <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+      <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+      <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+      <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+      <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+      <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+      <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+      <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+      <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+      <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+      <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+    </div>
+  </div>
+
+  <!-- Page Content -->
+  <div class="container">
+
+    <!-- Insurance Entry Form -->
+    <div class="section">
+      <h3>Add Insurance Details</h3>
+      <select id="type">
+        <option value="">Select Type</option>
+        <option value="Life">Life Insurance</option>
+        <option value="Health">Health Insurance</option>
+        <option value="Education">Education Loan</option>
+      </select>
+      <input type="text" id="company" placeholder="Company Name" required>
+      <input type="number" id="premium" placeholder="Premium Paid (₹)" required>
+      <input type="number" id="coverage" placeholder="Coverage Amount (₹)" required>
+      <button onclick="addInsurance()">Add</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="section">
+      <h3>Statistics</h3>
+      <div class="stats">
+        <div class="stat">
+          <h3>Total Premium</h3>
+          <p id="total-premium">₹0</p>
+        </div>
+        <div class="stat">
+          <h3>Average Coverage</h3>
+          <p id="avg-coverage">₹0</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Insurance Records -->
+    <div class="section">
+      <h3>Insurance Records</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Type</th>
+            <th>Company</th>
+            <th>Premium (₹)</th>
+            <th>Coverage (₹)</th>
+          </tr>
+        </thead>
+        <tbody id="insuranceTableBody">
+          <!-- Dynamic content -->
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    let insurances = [];
+
+    function addInsurance() {
+      const type = document.getElementById("type").value;
+      const company = document.getElementById("company").value.trim();
+      const premium = parseFloat(document.getElementById("premium").value);
+      const coverage = parseFloat(document.getElementById("coverage").value);
+
+      if (!type || !company || isNaN(premium) || isNaN(coverage)) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+
+      insurances.push({ type, company, premium, coverage });
+
+      document.getElementById("type").value = "";
+      document.getElementById("company").value = "";
+      document.getElementById("premium").value = "";
+      document.getElementById("coverage").value = "";
+
+      updateInsuranceTable();
+      updateInsuranceStats();
+    }
+
+    function updateInsuranceTable() {
+      const tableBody = document.getElementById("insuranceTableBody");
+      tableBody.innerHTML = "";
+
+      insurances.forEach(ins => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${ins.type}</td>
+          <td>${ins.company}</td>
+          <td>₹${ins.premium.toFixed(2)}</td>
+          <td>₹${ins.coverage.toFixed(2)}</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function updateInsuranceStats() {
+      let totalPremium = 0;
+      let totalCoverage = 0;
+
+      insurances.forEach(ins => {
+        totalPremium += ins.premium;
+        totalCoverage += ins.coverage;
+      });
+
+      document.getElementById("total-premium").textContent = `₹${totalPremium.toFixed(2)}`;
+      const avgCoverage = insurances.length > 0 ? (totalCoverage / insurances.length).toFixed(2) : 0;
+      document.getElementById("avg-coverage").textContent = `₹${avgCoverage}`;
+    }
+  </script>
+
+</body>
+</html>

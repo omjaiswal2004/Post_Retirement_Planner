@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Log Income</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f2f6fc;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav {
+            background-color: #1a2e3f;
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .container {
+            padding: 2rem;
+        }
+
+        .income-form {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .income-form h2 {
+            margin-bottom: 1rem;
+        }
+
+        .income-form input, .income-form select, .income-form button {
+            display: block;
+            width: 100%;
+            margin-bottom: 1rem;
+            padding: 0.75rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            font-size: 1rem;
+        }
+
+        .income-form button {
+            background-color: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .income-form button:hover {
+            background-color: #1e7e34;
+        }
+
+        .charts {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .filters {
+            text-align: right;
+            margin-bottom: 1rem;
+        }
+
+        .filters select {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #999;
+        }
+
+        footer {
+            background-color: #1a2e3f;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="logo">💼 Finance Tracker</div>
+        <div class="nav-links">
+            <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+            <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+            <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+            <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+            <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+            <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+            <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+            <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+            <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+            <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+            <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="income-form">
+            <h2><i class="fas fa-money-bill-wave"></i> Log New Income</h2>
+            <input type="text" placeholder="Source (e.g., Salary, Freelance)" id="income-source"/>
+            <input type="number" placeholder="Amount " id="income-amount"/>
+            <input type="date" id="income-date"/>
+            <select id="income-frequency">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly" selected>Monthly</option>
+                <option value="one-time">One-Time</option>
+            </select>
+            <button id="log-income-btn">Log Income</button>
+        </div>
+
+        <div class="filters">
+            <label for="trend-filter">Show Trend: </label>
+            <select id="trend-filter">
+                <option value="daily">Daily</option>
+                <option value="weekly">Weekly</option>
+                <option value="monthly" selected>Monthly</option>
+            </select>
+        </div>
+
+        <div class="charts">
+            <div class="chart-box">
+                <h3>Source-wise Income</h3>
+                <canvas id="sourceChart"></canvas>
+            </div>
+            <div class="chart-box">
+                <h3>Income Trend</h3>
+                <canvas id="trendChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        &copy; 2025 Finance Planner | Made by TY 53
+    </footer>
+
+    <script>
+        const sourceCtx = document.getElementById('sourceChart').getContext('2d');
+        const trendCtx = document.getElementById('trendChart').getContext('2d');
+        const trendFilter = document.getElementById('trend-filter');
+
+        let incomeData = JSON.parse(localStorage.getItem('incomeData')) || [];
+
+        const sourceChart = new Chart(sourceCtx, {
+            type: 'pie',
+            data: {
+                labels: [],
+                datasets: [{
+                    data: [],
+                    backgroundColor: []
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        const trendChart = new Chart(trendCtx, {
+            type: 'bar',
+            data: {
+                labels: [],
+                datasets: [{
+                    label: 'Income ($)',
+                    data: [],
+                    backgroundColor: '#28a745'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: { beginAtZero: true }
+                }
+            }
+        });
+
+        function updateSourceChart() {
+            const sourceSummary = {};
+            incomeData.forEach(item => {
+                sourceSummary[item.source] = (sourceSummary[item.source] || 0) + item.amount;
+            });
+
+            sourceChart.data.labels = Object.keys(sourceSummary);
+            sourceChart.data.datasets[0].data = Object.values(sourceSummary);
+            sourceChart.data.datasets[0].backgroundColor = Object.keys(sourceSummary).map(() => `#${Math.floor(Math.random() * 16777215).toString(16)}`);
+            sourceChart.update();
+        }
+
+        function updateTrendChartView(filter) {
+            const trendSummary = { daily: {}, weekly: {}, monthly: {} };
+
+            incomeData.forEach(item => {
+                const date = new Date(item.date);
+                const dayKey = item.date;
+                const weekKey = formatWeekly(date);
+                const monthKey = formatMonthly(date);
+
+                trendSummary.daily[dayKey] = (trendSummary.daily[dayKey] || 0) + item.amount;
+                trendSummary.weekly[weekKey] = (trendSummary.weekly[weekKey] || 0) + item.amount;
+                trendSummary.monthly[monthKey] = (trendSummary.monthly[monthKey] || 0) + item.amount;
+            });
+
+            trendChart.data.labels = Object.keys(trendSummary[filter]);
+            trendChart.data.datasets[0].data = Object.values(trendSummary[filter]);
+            trendChart.update();
+        }
+
+        function formatWeekly(date) {
+            const start = new Date(date);
+            const day = start.getDay();
+            const diff = start.getDate() - day + (day === 0 ? -6 : 1); // ISO week starts on Monday
+            const weekStart = new Date(start.setDate(diff));
+            return `Week of ${weekStart.toLocaleDateString()}`;
+        }
+
+        function formatMonthly(date) {
+            return `${date.toLocaleString('default', { month: 'short' })} ${date.getFullYear()}`;
+        }
+
+        document.getElementById('log-income-btn').addEventListener('click', () => {
+            const source = document.getElementById('income-source').value.trim();
+            const amount = parseFloat(document.getElementById('income-amount').value);
+            const date = document.getElementById('income-date').value; // Keep as string for local storage
+            const frequency = document.getElementById('income-frequency').value;
+
+            if (!source || isNaN(amount) || !date) {
+                alert("Please fill all fields correctly.");
+                return;
+            }
+
+            const newIncome = { source, amount, date, frequency };
+            incomeData.push(newIncome);
+            localStorage.setItem('incomeData', JSON.stringify(incomeData));
+
+            updateSourceChart();
+            updateTrendChartView(trendFilter.value);
+
+            // Clear form
+            document.getElementById('income-source').value = '';
+            document.getElementById('income-amount').value = '';
+            document.getElementById('income-date').value = '';
+            document.getElementById('income-frequency').value = 'monthly';
+        });
+
+        trendFilter.addEventListener('change', () => {
+            updateTrendChartView(trendFilter.value);
+        });
+
+        // Initial load of data and charts
+        updateSourceChart();
+        updateTrendChartView('monthly');
+    </script>
+</body>
+</html>

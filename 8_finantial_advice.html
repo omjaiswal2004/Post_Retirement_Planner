@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Financial Advice | Retirement Planner</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="8_fin.css">
+    <style>
+      nav {
+      background-color: #2c3e50;
+      padding: 1rem;
+      text-align: center;
+    }
+    nav a {
+      color: white;
+      margin: 0 1rem;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+    </style>
+</head>
+
+<body>
+  <nav>
+    <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+    <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+    <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+    <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+    <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+    <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+    <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+    <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+    <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+    <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+    <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+    <button id="themeToggle" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer;">
+      <i class="fas fa-moon"></i>
+    </button>
+    <button id="languageToggle" style="background:none; border:none; color:white; font-size:1.2rem; cursor:pointer; margin-left: 1rem;">
+      🌐 हिन्दी
+    </button>
+  </nav>
+
+    <main class="container">
+        <section class="contact-section">
+            <h1 data-en="Expert Financial Advisory Services" data-hi="विशेषज्ञ वित्तीय सलाह सेवाएं">Expert Financial Advisory Services</h1>
+            <p class="section-description" data-en="Connect with our certified financial advisors who specialize in retirement planning. Get personalized advice tailored to your unique financial situation and retirement goals." data-hi="हमारे प्रमाणित वित्तीय सलाहकारों से जुड़ें जो सेवानिवृत्ति योजना में विशेषज्ञ हैं। अपनी अनूठी वित्तीय स्थिति और सेवानिवृत्ति लक्ष्यों के अनुरूप व्यक्तिगत सलाह प्राप्त करें।">
+                Connect with our certified financial advisors who specialize in retirement planning.
+            </p>
+            
+            <!-- Financial Advisors Grid -->
+            <div class="advisors-grid">
+                <!-- Retirement Planning Expert -->
+                <div class="advisor-card">
+                    <div class="advisor-image">
+                        <img src="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Sarah Johnson">
+                    </div>
+                    <div class="advisor-info">
+                        <h3 data-en="Sarah Johnson" data-hi="सारा जॉनसन">Sarah Johnson</h3>
+                        <p class="specialization" data-en="Retirement Planning Specialist" data-hi="सेवानिवृत्ति योजना विशेषज्ञ">Retirement Planning Specialist</p>
+                        <p class="experience" data-en="CFP®, 18 years experience" data-hi="CFP®, 18 वर्षों का अनुभव">CFP®, 18 years experience</p>
+                        <p class="advisor-bio" data-en="Sarah specializes in creating comprehensive retirement plans that account for all aspects of post-retirement life, including income streams, healthcare costs, and legacy planning." data-hi="सारा व्यापक सेवानिवृत्ति योजनाएँ बनाने में विशेषज्ञ हैं जो सेवानिवृत्ति के बाद के जीवन के सभी पहलुओं को ध्यान में रखती हैं, जिसमें आय स्रोत, स्वास्थ्य देखभाल लागत और विरासत योजना शामिल हैं।">
+                            Sarah specializes in creating comprehensive retirement plans...
+                        </p>
+                        <div class="contact-details">
+                            <p><i class="fas fa-phone"></i> (555) 123-4567</p>
+                            <p><i class="fas fa-envelope"></i> sarah@retirementexperts.com</p>
+                            <p><i class="fas fa-map-marker-alt"></i> <span data-en="New York, USA" data-hi="न्यूयॉर्क, यूएसए">New York, USA</span></p>
+                            <p><i class="fas fa-clock"></i> <span data-en="Mon-Fri: 9AM-5PM EST" data-hi="सोम-शुक्र: सुबह 9-शाम 5 EST">Mon-Fri: 9AM-5PM EST</span></p>
+                        </div>
+                        <button class="btn-consult" data-en="Schedule Consultation" data-hi="परामर्श शेड्यूल करें">Schedule Consultation</button>
+                    </div>
+                </div>
+                
+                <!-- Tax Strategy Expert -->
+                <div class="advisor-card">
+                    <div class="advisor-image">
+                        <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Michael Chen">
+                    </div>
+                    <div class="advisor-info">
+                        <h3 data-en="Michael Chen" data-hi="माइकल चेन">Michael Chen</h3>
+                        <p class="specialization" data-en="Tax-Efficient Withdrawal Expert" data-hi="कर-कुशल निकासी विशेषज्ञ">Tax-Efficient Withdrawal Expert</p>
+                        <p class="experience" data-en="CPA, CFP®, 14 years experience" data-hi="CPA, CFP®, 14 वर्षों का अनुभव">CPA, CFP®, 14 years experience</p>
+                        <p class="advisor-bio" data-en="Michael helps clients develop tax-efficient withdrawal strategies to minimize tax burdens in retirement while maximizing income from various account types." data-hi="माइकल ग्राहकों को कर-कुशल निकासी रणनीतियाँ विकसित करने में मदद करते हैं ताकि सेवानिवृत्ति में कर बोझ को कम किया जा सके और विभिन्न खाता प्रकारों से आय को अधिकतम किया जा सके।">
+                            Michael helps clients develop tax-efficient withdrawal strategies...
+                        </p>
+                        <div class="contact-details">
+                            <p><i class="fas fa-phone"></i> (555) 987-6543</p>
+                            <p><i class="fas fa-envelope"></i> michael@retirementexperts.com</p>
+                            <p><i class="fas fa-map-marker-alt"></i> <span data-en="San Francisco, USA" data-hi="सैन फ्रांसिस्को, यूएसए">San Francisco, USA</span></p>
+                            <p><i class="fas fa-clock"></i> <span data-en="Mon-Fri: 10AM-6PM PST" data-hi="सोम-शुक्र: सुबह 10-शाम 6 PST">Mon-Fri: 10AM-6PM PST</span></p>
+                        </div>
+                        <button class="btn-consult" data-en="Schedule Consultation" data-hi="परामर्श शेड्यूल करें">Schedule Consultation</button>
+                    </div>
+                </div>
+                
+                <!-- Healthcare Cost Analyst -->
+                <div class="advisor-card">
+                    <div class="advisor-image">
+                        <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=761&q=80" alt="Priya Patel">
+                    </div>
+                    <div class="advisor-info">
+                        <h3 data-en="Priya Patel" data-hi="प्रिया पटेल">Priya Patel</h3>
+                        <p class="specialization" data-en="Healthcare Cost Analyst" data-hi="स्वास्थ्य देखभाल लागत विश्लेषक">Healthcare Cost Analyst</p>
+                        <p class="experience" data-en="RHU®, 12 years experience" data-hi="RHU®, 12 वर्षों का अनुभव">RHU®, 12 years experience</p>
+                        <p class="advisor-bio" data-en="Priya specializes in helping clients plan for healthcare costs in retirement, including Medicare planning, long-term care insurance, and medical expense budgeting." data-hi="प्रिया ग्राहकों को सेवानिवृत्ति में स्वास्थ्य देखभाल लागतों की योजना बनाने में मदद करने में विशेषज्ञ हैं, जिसमें मेडिकेयर योजना, दीर्घकालिक देखभाल बीमा और चिकित्सा व्यय बजट शामिल हैं।">
+                            Priya specializes in helping clients plan for healthcare costs...
+                        </p>
+                        <div class="contact-details">
+                            <p><i class="fas fa-phone"></i> (555) 456-7890</p>
+                            <p><i class="fas fa-envelope"></i> priya@retirementexperts.com</p>
+                            <p><i class="fas fa-map-marker-alt"></i> <span data-en="Chicago, USA" data-hi="शिकागो, यूएसए">Chicago, USA</span></p>
+                            <p><i class="fas fa-clock"></i> <span data-en="Mon-Fri: 8AM-4PM CST" data-hi="सोम-शुक्र: सुबह 8-शाम 4 CST">Mon-Fri: 8AM-4PM CST</span></p>
+                        </div>
+                        <button class="btn-consult" data-en="Schedule Consultation" data-hi="परामर्श शेड्यूल करें">Schedule Consultation</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Testimonials Section -->
+            <div class="testimonials">
+                <h2 data-en="What Our Clients Say" data-hi="हमारे ग्राहक क्या कहते हैं">What Our Clients Say</h2>
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text" data-en="&quot;Sarah helped me create a retirement plan that gave me confidence to retire early. Her attention to detail and comprehensive approach made all the difference.&quot;" data-hi="&quot;सारा ने मुझे एक सेवानिवृत्ति योजना बनाने में मदद की जिसने मुझे जल्दी रिटायर होने का आत्मविश्वास दिया। उनका विस्तार पर ध्यान और व्यापक दृष्टिकोण ने सभी अंतर पैदा कर दिया।&quot;">
+                            "Sarah helped me create a retirement plan that gave me confidence to retire early..."
+                        </p>
+                        <p class="testimonial-author" data-en="- Robert T., Retired at 62" data-hi="- रॉबर्ट टी., 62 वर्ष की आयु में सेवानिवृत्त">- Robert T., Retired at 62</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text" data-en="&quot;Michael's tax strategies saved me thousands in retirement. His expertise in tax-efficient withdrawals is unmatched.&quot;" data-hi="&quot;माइकल की कर रणनीतियों ने सेवानिवृत्ति में मुझे हजारों बचाए। कर-कुशल निकासी में उनकी विशेषज्ञता अद्वितीय है।&quot;">
+                            "Michael's tax strategies saved me thousands in retirement..."
+                        </p>
+                        <p class="testimonial-author" data-en="- Susan M., Retired Teacher" data-hi="- सुसान एम., सेवानिवृत्त शिक्षक">- Susan M., Retired Teacher</p>
+                    </div>
+                    <div class="testimonial-card">
+                        <p class="testimonial-text" data-en="&quot;Priya's healthcare cost analysis was eye-opening. She helped me budget accurately for medical expenses I hadn't even considered.&quot;" data-hi="&quot;प्रिया का स्वास्थ्य देखभाल लागत विश्लेषण आंखें खोलने वाला था। उन्होंने मुझे उन चिकित्सा व्ययों के लिए सही बजट बनाने में मदद की जिनके बारे में मैंने सोचा भी नहीं था।&quot;">
+                            "Priya's healthcare cost analysis was eye-opening..."
+                        </p>
+                        <p class="testimonial-author" data-en="- James K., Planning to Retire" data-hi="- जेम्स के., सेवानिवृत्त होने की योजना">- James K., Planning to Retire</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- General Contact Form -->
+            <div class="contact-form-container">
+                <h2 data-en="Contact Our Advisory Team" data-hi="हमारी सलाहकार टीम से संपर्क करें">Contact Our Advisory Team</h2>
+                <form action="process_contact.php" method="POST" class="contact-form">
+                    <div class="form-group">
+                        <label for="name" data-en="Full Name" data-hi="पूरा नाम">Full Name</label>
+                        <input type="text" id="name" name="name" data-en-placeholder="Your Name" data-hi-placeholder="आपका नाम" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" data-en="Email Address" data-hi="ईमेल पता">Email Address</label>
+                        <input type="email" id="email" name="email" data-en-placeholder="Your Email" data-hi-placeholder="आपका ईमेल" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone" data-en="Phone Number" data-hi="फोन नंबर">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" data-en-placeholder="Your Phone Number" data-hi-placeholder="आपका फोन नंबर" placeholder="Your Phone Number">
+                    </div>
+                    <div class="form-group">
+                        <label for="advisor" data-en="Preferred Advisor (Optional)" data-hi="पसंदीदा सलाहकार (वैकल्पिक)">Preferred Advisor (Optional)</label>
+                        <select id="advisor" name="advisor">
+                            <option value="" data-en="Select Advisor" data-hi="सलाहकार चुनें">Select Advisor</option>
+                            <option value="Sarah Johnson" data-en="Sarah Johnson - Retirement Planning" data-hi="सारा जॉनसन - सेवानिवृत्ति योजना">Sarah Johnson - Retirement Planning</option>
+                            <option value="Michael Chen" data-en="Michael Chen - Tax Strategies" data-hi="माइकल चेन - कर रणनीतियाँ">Michael Chen - Tax Strategies</option>
+                            <option value="Priya Patel" data-en="Priya Patel - Healthcare Costs" data-hi="प्रिया पटेल - स्वास्थ्य देखभाल लागत">Priya Patel - Healthcare Costs</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" data-en="Your Questions" data-hi="आपके प्रश्न">Your Questions</label>
+                        <textarea id="message" name="message" data-en-placeholder="Tell us about your retirement planning needs..." data-hi-placeholder="हमें अपनी सेवानिवृत्ति योजना आवश्यकताओं के बारे में बताएं..." placeholder="Tell us about your retirement planning needs..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-submit" data-en="Send Message" data-hi="संदेश भेजें">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <script src="8_fin.js"></script>
+</body>
+</html>

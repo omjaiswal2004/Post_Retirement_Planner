@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Track Investments</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background-color: #f4f7f9;
+      color: #333;
+    }
+
+    /* Top Navbar */
+    .nav-bar {
+      background-color: #1a2e3f;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-links a {
+      color: white;
+      margin-left: 2rem;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+      color: #ffcc00;
+    }
+
+    .container {
+      display: flex;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    .left-panel {
+      flex: 1;
+    }
+
+    .form-section, .stats-section, .table-section {
+      background: #fff;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 2rem;
+    }
+
+    .form-section input {
+      padding: 0.5rem;
+      margin-right: 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .form-section button {
+      padding: 0.5rem 1rem;
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .form-section button:hover {
+      background-color: #1558b0;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 2rem;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat h3 {
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+      color: #1a2e3f;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #1a2e3f;
+      color: white;
+    }
+
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    h2 {
+      text-align: center;
+      margin: 2rem 0;
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+        padding: 1rem;
+      }
+
+      .nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+
+      .form-section input {
+        width: 100%;
+        margin-right: 0;
+      }
+
+      .form-section button {
+        width: 100%;
+        margin-top: 0.5rem;
+      }
+
+      .stats {
+        flex-direction: column;
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Nav -->
+  <div class="nav-bar">
+    <h2 style="color: white; margin: 0;"><i class="fas fa-chart-line"></i> Finance Tracker</h2>
+    <div class="nav-links">
+      <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+      <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+      <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+      <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+      <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+      <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+      <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+      <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+      <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+      <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+      <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+
+    </div>
+  </div>
+
+  <!-- Page Layout -->
+  <div class="container">
+    <div class="left-panel">
+      <div class="form-section">
+        <h3>Add New Investment</h3>
+        <input type="text" id="investmentName" placeholder="Investment Name" required>
+        <input type="number" id="amount" placeholder="Amount Invested" required>
+        <input type="number" id="returns" placeholder="Returns (%)" required>
+        <button onclick="addInvestment()">Add Investment</button>
+      </div>
+
+      <div class="stats-section">
+        <h3>Statistics</h3>
+        <div class="stats">
+          <div class="stat">
+            <h3>Total Investments</h3>
+            <p id="total-investments">₹0</p>
+          </div>
+          <div class="stat">
+            <h3>Average Return Rate</h3>
+            <p id="avg-return">0%</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-section">
+        <h3>Investment Records</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Amount Invested (₹)</th>
+              <th>Return (%)</th>
+            </tr>
+          </thead>
+          <tbody id="investmentTableBody">
+            <!-- Dynamic rows go here -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let investments = [];
+
+    function addInvestment() {
+      const name = document.getElementById("investmentName").value.trim();
+      const amount = parseFloat(document.getElementById("amount").value);
+      const returns = parseFloat(document.getElementById("returns").value);
+
+      if (!name || isNaN(amount) || isNaN(returns)) {
+        alert("Please fill all fields correctly.");
+        return;
+      }
+
+      investments.push({ name, amount, returns });
+
+      document.getElementById("investmentName").value = "";
+      document.getElementById("amount").value = "";
+      document.getElementById("returns").value = "";
+
+      updateTable();
+      updateStats();
+    }
+
+    function updateTable() {
+      const tableBody = document.getElementById("investmentTableBody");
+      tableBody.innerHTML = "";
+
+      investments.forEach(inv => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${inv.name}</td>
+          <td>₹${inv.amount.toFixed(2)}</td>
+          <td>${inv.returns.toFixed(2)}%</td>
+        `;
+        tableBody.appendChild(row);
+      });
+    }
+
+    function updateStats() {
+      let totalAmount = 0;
+      let totalReturns = 0;
+
+      investments.forEach(inv => {
+        totalAmount += inv.amount;
+        totalReturns += inv.returns;
+      });
+
+      document.getElementById("total-investments").textContent = `₹${totalAmount.toFixed(2)}`;
+      const avgReturn = investments.length > 0 ? (totalReturns / investments.length).toFixed(2) : 0;
+      document.getElementById("avg-return").textContent = `${avgReturn}%`;
+    }
+  </script>
+
+</body>
+</html>

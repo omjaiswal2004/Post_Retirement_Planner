@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retirement Savings Calculator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <style>
+        /* Dashboard Navigation Styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        nav {
+            background-color: #1a2e3f;
+            color: white;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-links {
+            display: none;
+            width: 100%;
+            flex-direction: column;
+            gap: 0.5rem;
+            align-items: flex-start;
+        }
+
+        .nav-links.active {
+            display: flex;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .nav-links a:hover {
+            color: #00d4ff;
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-controls button {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Dark Mode Styles */
+        body.dark-mode {
+            background: #121212;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .calculator-container {
+            background: #1e1e1e;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .calculator-header {
+            background: #000000;
+        }
+
+        body.dark-mode .input-section,
+        body.dark-mode .results-section {
+            background: #2d2d2d;
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .input-group label {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .input-group input,
+        body.dark-mode .input-group select {
+            background: #333;
+            color: #e0e0e0;
+            border-color: #444;
+        }
+
+        body.dark-mode .results-header,
+        body.dark-mode .result-item {
+            border-color: #444;
+        }
+
+        body.dark-mode .suggestions {
+            background: #333;
+        }
+
+        body.dark-mode .suggestions h4 {
+            color: #ffa726;
+        }
+
+        body.dark-mode nav {
+            background-color: #000000;
+        }
+
+        body.dark-mode .nav-links a {
+            color: #e0e0e0;
+        }
+
+        body.dark-mode .nav-links a:hover {
+            color: #00e5ff;
+        }
+
+        /* Calculator Styles */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .calculator-container {
+            max-width: 1000px;
+            margin: 20px auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .calculator-header {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .calculator-header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        
+        .calculator-body {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            padding: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .calculator-body {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+                padding: 30px;
+            }
+            
+            .nav-links {
+                display: flex;
+                flex-direction: row;
+                width: auto;
+                gap: 1.5rem;
+            }
+            
+            .menu-toggle {
+                display: none;
+            }
+        }
+        
+        .input-section, .results-section {
+            padding: 15px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 14px;
+        }
+        
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--secondary);
+        }
+        
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .range-container input[type="range"] {
+            flex: 1;
+        }
+        
+        .range-value {
+            min-width: 40px;
+            text-align: right;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        button.calculate-btn {
+            background: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+        
+        button.calculate-btn:hover {
+            background: #2980b9;
+        }
+        
+        .results-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .results-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .results-header h2 {
+            font-size: 18px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+        }
+        
+        .result-value {
+            font-weight: 700;
+            color: var(--secondary);
+        }
+        
+        .chart-container {
+            height: 180px;
+            margin-top: 20px;
+            position: relative;
+        }
+        
+        .suggestions {
+            margin-top: 20px;
+            padding: 12px;
+            background: #fff8e1;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        
+        .suggestions h4 {
+            color: #e67e22;
+            margin-bottom: 8px;
+            font-size: 16px;
+        }
+        
+        .suggestions ul {
+            padding-left: 18px;
+        }
+        
+        .suggestions li {
+            margin-bottom: 5px;
+        }
+
+        /* Hindi specific styles */
+        body.hindi .calculator-header h1,
+        body.hindi .calculator-header p,
+        body.hindi .input-group label,
+        body.hindi .result-label,
+        body.hindi .results-header h2,
+        body.hindi .suggestions h4,
+        body.hindi .suggestions li,
+        body.hindi button.calculate-btn {
+            font-family: 'Nirmala UI', 'Arial Unicode MS', sans-serif;
+        }
+
+        /* Mobile menu toggle */
+        @media (max-width: 767px) {
+            .menu-toggle {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .calculator-header h1 {
+                font-size: 20px;
+            }
+            
+            .calculator-header p {
+                font-size: 14px;
+            }
+            
+            .chart-container {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Dashboard Navigation -->
+    <nav>
+        <div class="logo">💼 Finance Tracker</div>
+        <button class="menu-toggle" id="menuToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="nav-links" id="navLinks">
+            <a href="dashboard.html" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</a>
+            <a href="2_income.html" data-en="Income" data-hi="आय">Income</a>
+            <a href="3_expence.html" data-en="Expenses" data-hi="व्यय">Expenses</a>
+            <a href="5_goals.html" data-en="Goals" data-hi="लक्ष्य">Goals</a>
+            <a href="9_reports.html" data-en="Reports" data-hi="रिपोर्ट">Reports</a>
+            <a href="7_investments.html" data-en="Investment" data-hi="निवेश">Investment</a>
+            <a href="6_insurance.html" data-en="Insurance" data-hi="बीमा">Insurance</a>
+            <a href="8_finantial_advice.html" data-en="Financial Advice" data-hi="वित्तीय सलाह">Financial Advice</a>
+            <a href="10_role_based.html" data-en="Role-Based Planning" data-hi="भूमिका-आधारित योजना">Role-Based Planning</a>
+            <a href="4_income_tax.html" data-en="Income Tax Calculator" data-hi="आयकर कैलकुलेटर">Income Tax Calculator</a>
+            <a href="11_Future_cal.html" data-en="Future Insights" data-hi="भविष्य के विचार">Future Insights</a>
+        </div>
+        <div class="nav-controls">
+            <button id="languageToggle">
+                <i class="fas fa-language"></i>
+                <span id="languageText">EN</span>
+            </button>
+            <button id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Retirement Calculator Content -->
+    <div class="calculator-container">
+        <div class="calculator-header">
+            <h1 data-en="Retirement Savings Calculator" data-hi="रिटायरमेंट बचत कैलकुलेटर">Retirement Savings Calculator</h1>
+            <p data-en="Plan your retirement savings based on your current financial situation" 
+               data-hi="अपनी वर्तमान वित्तीय स्थिति के आधार पर अपनी सेवानिवृत्ति बचत की योजना बनाएं">
+                Plan your retirement savings based on your current financial situation
+            </p>
+        </div>
+        
+        <div class="calculator-body">
+            <div class="input-section">
+                <div class="input-group">
+                    <label for="currentAge" data-en="Your Current Age" data-hi="आपकी वर्तमान आयु">Your Current Age</label>
+                    <input type="number" id="currentAge" min="18" max="80" value="30">
+                </div>
+                
+                <div class="input-group">
+                    <label for="retirementAge" data-en="Planned Retirement Age" data-hi="नियोजित सेवानिवृत्ति आयु">Planned Retirement Age</label>
+                    <input type="number" id="retirementAge" min="40" max="100" value="60">
+                </div>
+                
+                <div class="input-group">
+                    <label for="currentSavings" data-en="Current Retirement Savings (₹)" data-hi="वर्तमान सेवानिवृत्ति बचत (₹)">Current Retirement Savings (₹)</label>
+                    <input type="number" id="currentSavings" min="0" value="500000">
+                </div>
+                
+                <div class="input-group">
+                    <label for="monthlyContribution" data-en="Monthly Contribution (₹)" data-hi="मासिक योगदान (₹)">Monthly Contribution (₹)</label>
+                    <input type="number" id="monthlyContribution" min="0" value="10000">
+                </div>
+                
+                <div class="input-group">
+                    <label for="annualReturn" data-en="Expected Annual Return (%)" data-hi="अपेक्षित वार्षिक रिटर्न (%)">Expected Annual Return (%)</label>
+                    <div class="range-container">
+                        <input type="range" id="annualReturn" min="1" max="20" step="0.5" value="8">
+                        <span class="range-value" id="returnValue">8%</span>
+                    </div>
+                </div>
+                
+                <div class="input-group">
+                    <label for="inflation" data-en="Expected Inflation Rate (%)" data-hi="अपेक्षित मुद्रास्फीति दर (%)">Expected Inflation Rate (%)</label>
+                    <div class="range-container">
+                        <input type="range" id="inflation" min="0" max="10" step="0.1" value="6">
+                        <span class="range-value" id="inflationValue">6%</span>
+                    </div>
+                </div>
+                
+                <button class="calculate-btn" data-en="Calculate" data-hi="गणना करें" onclick="calculateRetirement()">Calculate</button>
+            </div>
+            
+            <div class="results-section">
+                <div class="results-header">
+                    <h2 data-en="Your Retirement Plan Summary" data-hi="आपकी सेवानिवृत्ति योजना सारांश">Your Retirement Plan Summary</h2>
+                </div>
+                
+                <div id="results">
+                    <div class="result-item">
+                        <span class="result-label" data-en="Years Until Retirement:" data-hi="सेवानिवृत्ति तक वर्ष:">Years Until Retirement:</span>
+                        <span class="result-value" id="yearsUntilRetirement">30</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label" data-en="Total Contributions:" data-hi="कुल योगदान:">Total Contributions:</span>
+                        <span class="result-value" id="totalContributions">₹36,00,000</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label" data-en="Projected Retirement Corpus:" data-hi="अनुमानित सेवानिवृत्ति कोष:">Projected Retirement Corpus:</span>
+                        <span class="result-value" id="retirementCorpus">₹1,45,00,000</span>
+                    </div>
+                    
+                    <div class="result-item">
+                        <span class="result-label" data-en="Monthly Income (4% Rule):" data-hi="मासिक आय (4% नियम):">Monthly Income (4% Rule):</span>
+                        <span class="result-value" id="monthlyIncome">₹48,333</span>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="retirementChart"></canvas>
+                    </div>
+                    
+                    <div class="suggestions" id="suggestions">
+                        <h4 data-en="Recommendations:" data-hi="सिफारिशें:">Recommendations:</h4>
+                        <ul>
+                            <li data-en="Consider increasing your monthly contributions" 
+                                data-hi="अपने मासिक योगदान को बढ़ाने पर विचार करें">Consider increasing your monthly contributions</li>
+                            <li data-en="Review your investment strategy for better returns" 
+                                data-hi="बेहतर रिटर्न के लिए अपनी निवेश रणनीति की समीक्षा करें">Review your investment strategy for better returns</li>
+                            <li data-en="Account for inflation in your retirement planning" 
+                                data-hi="अपनी सेवानिवृत्ति योजना में मुद्रास्फीति को ध्यान में रखें">Account for inflation in your retirement planning</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Theme Toggle Functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleBtn = document.getElementById('themeToggle');
+            const icon = toggleBtn.querySelector('i');
+
+            toggleBtn.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    icon.classList.remove('fa-moon');
+                    icon.classList.add('fa-sun');
+                } else {
+                    icon.classList.remove('fa-sun');
+                    icon.classList.add('fa-moon');
+                }
+            });
+
+            // Language Toggle Functionality
+            const languageToggle = document.getElementById('languageToggle');
+            const languageText = document.getElementById('languageText');
+            let currentLanguage = 'en';
+
+            languageToggle.addEventListener('click', () => {
+                currentLanguage = currentLanguage === 'en' ? 'hi' : 'en';
+                toggleLanguage(currentLanguage);
+            });
+
+            function toggleLanguage(lang) {
+                // Update button text
+                languageText.textContent = lang.toUpperCase();
+                
+                // Toggle body class for Hindi font
+                if (lang === 'hi') {
+                    document.body.classList.add('hindi');
+                } else {
+                    document.body.classList.remove('hindi');
+                }
+                
+                // Update all elements with data attributes
+                document.querySelectorAll('[data-en], [data-hi]').forEach(element => {
+                    if (element.tagName === 'INPUT' && element.type === 'range') {
+                        // Skip range inputs
+                        return;
+                    }
+                    
+                    const text = element.getAttribute(`data-${lang}`);
+                    if (text) {
+                        if (element.tagName === 'INPUT' || element.tagName === 'SELECT') {
+                            element.placeholder = text;
+                        } else {
+                            element.textContent = text;
+                        }
+                    }
+                });
+            }
+
+            // Mobile menu toggle
+            const menuToggle = document.getElementById('menuToggle');
+            const navLinks = document.getElementById('navLinks');
+            
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+
+            // Initialize calculator
+            initChart();
+            calculateRetirement();
+        });
+
+        // Update range value displays
+        document.getElementById('annualReturn').addEventListener('input', function() {
+            document.getElementById('returnValue').textContent = this.value + '%';
+        });
+        
+        document.getElementById('inflation').addEventListener('input', function() {
+            document.getElementById('inflationValue').textContent = this.value + '%';
+        });
+        
+        // Initialize chart
+        let retirementChart;
+        
+        function initChart() {
+            const ctx = document.getElementById('retirementChart').getContext('2d');
+            retirementChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Current', '5 Years', '10 Years', '15 Years', '20 Years', 'Retirement'],
+                    datasets: [{
+                        label: 'Projected Savings',
+                        data: [500000, 1200000, 2500000, 4500000, 7500000, 14500000],
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return '₹' + (value / 100000).toFixed(1) + 'L';
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '₹' + context.raw.toLocaleString('en-IN');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // Calculate retirement plan
+        function calculateRetirement() {
+            // Get input values
+            const currentAge = parseInt(document.getElementById('currentAge').value);
+            const retirementAge = parseInt(document.getElementById('retirementAge').value);
+            const currentSavings = parseFloat(document.getElementById('currentSavings').value) || 0;
+            const monthlyContribution = parseFloat(document.getElementById('monthlyContribution').value) || 0;
+            const annualReturn = parseFloat(document.getElementById('annualReturn').value) / 100;
+            const inflation = parseFloat(document.getElementById('inflation').value) / 100;
+            
+            // Validate inputs
+            if (currentAge >= retirementAge) {
+                alert(document.body.classList.contains('hindi') ? 
+                    'सेवानिवृत्ति की आयु वर्तमान आयु से अधिक होनी चाहिए' : 
+                    'Retirement age must be greater than current age');
+                return;
+            }
+            
+            // Calculate values
+            const yearsUntilRetirement = retirementAge - currentAge;
+            const totalMonths = yearsUntilRetirement * 12;
+            
+            // Future value of current savings
+            const futureValueOfSavings = currentSavings * Math.pow(1 + annualReturn, yearsUntilRetirement);
+            
+            // Future value of monthly contributions
+            const monthlyRate = annualReturn / 12;
+            const futureValueOfContributions = monthlyContribution * 
+                ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate) * 
+                (1 + monthlyRate);
+            
+            // Total retirement corpus
+            const totalCorpus = futureValueOfSavings + futureValueOfContributions;
+            const totalContributions = monthlyContribution * totalMonths;
+            
+            // Monthly income (4% rule)
+            const monthlyIncome = (totalCorpus * 0.04) / 12;
+            
+            // Update results
+            document.getElementById('yearsUntilRetirement').textContent = yearsUntilRetirement;
+            document.getElementById('totalContributions').textContent = '₹' + Math.round(totalContributions).toLocaleString('en-IN');
+            document.getElementById('retirementCorpus').textContent = '₹' + Math.round(totalCorpus).toLocaleString('en-IN');
+            document.getElementById('monthlyIncome').textContent = '₹' + Math.round(monthlyIncome).toLocaleString('en-IN');
+            
+            // Update chart
+            updateChart(currentSavings, monthlyContribution, monthlyRate, yearsUntilRetirement);
+            
+            // Show suggestions if needed
+            const monthlyIncomeNeeded = 50000; // Example needed amount
+            if (monthlyIncome < monthlyIncomeNeeded) {
+                document.getElementById('suggestions').style.display = 'block';
+            } else {
+                document.getElementById('suggestions').style.display = 'none';
+            }
+        }
+        
+        function updateChart(currentSavings, monthlyContribution, monthlyRate, years) {
+            const dataPoints = [0, 5, 10, 15, 20, years].filter(y => y <= years);
+            const projectedValues = dataPoints.map(year => {
+                if (year === 0) return currentSavings;
+                
+                const months = year * 12;
+                const fvSavings = currentSavings * Math.pow(1 + (monthlyRate * 12), year);
+                const fvContributions = monthlyContribution * 
+                    ((Math.pow(1 + monthlyRate, months) - 1) / monthlyRate) * 
+                    (1 + monthlyRate);
+                return fvSavings + fvContributions;
+            });
+            
+            // Pad array to 6 elements if needed
+            while (dataPoints.length < 6) {
+                dataPoints.push('');
+                projectedValues.push(0);
+            }
+            
+            retirementChart.data.labels = dataPoints.map(y => y === '' ? '' : (y === years ? 'Retirement' : y + ' Years'));
+            retirementChart.data.datasets[0].data = projectedValues;
+            retirementChart.update();
+        }
+    </script>
+</body>
+</html>
